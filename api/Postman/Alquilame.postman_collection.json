@@ -1,0 +1,896 @@
+{
+	"info": {
+		"_postman_id": "ad89af1b-c27f-44ea-9e48-581e24d84230",
+		"name": "Alquilame",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24106087"
+	},
+	"item": [
+		{
+			"name": "Dwelling",
+			"item": [
+				{
+					"name": "GET Todos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/?page=2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One Dwelling",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/53",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								"53"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Viviendas de un Usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Nueva vivienda",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Chalet Cuqui\",\r\n    \"address\": \"C/ Sierpes Nº2, Sevilla\",\r\n    \"description\": \"Chalet muy chulo que está muy chulo y sigue siendo chulo. Tiene habitaciones chulas y eso :)\",\r\n    \"type\": \"CHALET\",\r\n    \"price\": 563,\r\n    \"m2\": 34,\r\n    \"numBedrooms\": 3,\r\n    \"numBathrooms\": 1,\r\n    \"hasElevator\": false,\r\n    \"hasPool\": true,\r\n    \"hasTerrace\": true,\r\n    \"hasGarage\": true,\r\n    \"provinceName\": \"Sevilla\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Editar vivienda",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Chalet Cuqui\",\n    \"address\": \"C/ Sierpes Nº2, Sevilla\",\n    \"description\": \"Chalet muy chulo que está muy chulo y sigue siendo chulo. Tiene habitaciones chulas y eso :)\",\n    \"type\": \"CHALET\",\n    \"price\": 563,\n    \"m2\": 34,\n    \"numBedrooms\": 3,\n    \"numBathrooms\": 1,\n    \"hasElevator\": {{$randomBoolean}},\n    \"hasPool\": {{$randomBoolean}},\n    \"hasTerrace\": {{$randomBoolean}},\n    \"hasGarage\": {{$randomBoolean}},\n    \"provinceId\": 43\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/103",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								"103"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Borrar vivienda",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/53",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								"53"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Mark Dwelling As Favourite",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/76/favourite",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								"76",
+								"favourite"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Vivienda Favorita",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/53/favourite",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								"53",
+								"favourite"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dwelling By Province",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/province/43",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								"province",
+								"43"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Dwelling Image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/joseluisgilmartin/Desktop/Odoo/chalet1.jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/103/image",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								"103",
+								"image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Dwelling Image",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/103/image",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								"103",
+								"image"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Profile",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"fullName\": \"José Luis Gil Martín\",\n    \"address\": \"\",\n    \"phoneNumber\":\"654897204\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Password",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"oldPassword\": \"Eu57ESbiU\",\n    \"newPassword\": \"GHyuIopR5.\",\n    \"verifyNewPassword\": \"GHyuIopR5.\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user/changePassword",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"changePassword"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Favourite Dwellings",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/favourites",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"favourites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Profile",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/delete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit User Avatar",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/joseluisgilmartin/Desktop/avatar.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/user/changeAvatar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"changeAvatar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User Avatar",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/deleteAvatar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"deleteAvatar"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "POST Login Propietario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", json.token);",
+									"pm.collectionVariables.set(\"refresh_token\", json.refreshToken);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"eantoniutti0\",\n    \"password\": \"Eu57ESbiU\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Login Propietario 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", json.token);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"rjersh1\",\n    \"password\": \"3xPIFHwpE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Login Inquilino",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", json.token);",
+									"pm.collectionVariables.set(\"refresh_token\", json.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"hwhistlecraft4\",\n    \"password\": \"EGFgZ74Jr6WI\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Nuevo Propietario",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user1\",\n    \"email\": \"admin@google.com\",\n    \"address\": \"C/ Mi Casa Nº2\",\n    \"phoneNumber\": \"698563214\",\n    \"fullName\": \"Luismi López\",\n    \"password\": \"DFGhjkl.3\",\n    \"verifyPassword\": \"DFGhjkl.3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register/propietario",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register",
+								"propietario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Nuevo Inquilino",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user2\",\n    \"email\": \"admin@yahoo.com\",\n    \"address\": \"C/ Mi Casa Nº2\",\n    \"phoneNumber\": \"678956782\",\n    \"fullName\": \"Luismi López\",\n    \"password\": \"DFGhjkl.3\",\n    \"verifyPassword\": \"DFGhjkl.3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/register/inquilino",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"register",
+								"inquilino"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Post Login Propietario 3",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", json.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user1\",\n    \"password\": \"DFGhjkl.3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Province",
+			"item": [
+				{
+					"name": "Get All Provinces",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/province/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"province",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get One Province",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/province/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"province",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Province",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New York\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/province/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"province",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Province",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New York\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/province/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"province",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Province",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/province/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"province",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "refresh_token",
+			"value": ""
+		}
+	]
+}
