@@ -1,10 +1,9 @@
 package com.salesianostriana.dam.alquilame.security;
 
-import com.salesianostriana.dam.alquilame.security.jwt.JwtAuthenticationFilter;
+import com.salesianostriana.dam.alquilame.security.jwt.access.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -80,7 +79,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web -> web.ignoring().antMatchers("/h2-console/**", "/auth/register/**", "/auth/login/**", "/swagger-ui/**", "/v3/api-docs/**", "/download/**"));
+        return (web -> web.ignoring().antMatchers("/h2-console/**", "/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/download/**"));
     }
 
 }

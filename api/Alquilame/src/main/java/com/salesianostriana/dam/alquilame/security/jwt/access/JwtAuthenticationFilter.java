@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.alquilame.security.jwt;
+package com.salesianostriana.dam.alquilame.security.jwt.access;
 
 import com.salesianostriana.dam.alquilame.exception.jwt.JwtTokenException;
 import com.salesianostriana.dam.alquilame.user.model.User;

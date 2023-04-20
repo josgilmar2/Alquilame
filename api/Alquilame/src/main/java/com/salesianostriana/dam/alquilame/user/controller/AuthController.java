@@ -1,6 +1,10 @@
 package com.salesianostriana.dam.alquilame.user.controller;
 
-import com.salesianostriana.dam.alquilame.security.jwt.JwtProvider;
+import com.salesianostriana.dam.alquilame.exception.jwt.RefreshTokenException;
+import com.salesianostriana.dam.alquilame.security.jwt.access.JwtProvider;
+import com.salesianostriana.dam.alquilame.security.jwt.refresh.RefreshToken;
+import com.salesianostriana.dam.alquilame.security.jwt.refresh.RefreshTokenRequest;
+import com.salesianostriana.dam.alquilame.security.jwt.refresh.RefreshTokenService;
 import com.salesianostriana.dam.alquilame.user.dto.CreateUserDto;
 import com.salesianostriana.dam.alquilame.user.dto.LoginResponse;
 import com.salesianostriana.dam.alquilame.user.dto.LoginRequest;
@@ -21,11 +25,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
-import java.net.URI;
 
 @RestController
 @RequestMapping("/auth")
@@ -35,6 +36,7 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authManager;
     private final JwtProvider jwtProvider;
+    private final RefreshTokenService refreshTokenService;
 
     @Operation(summary = "creación de un nuevo inquilino")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -185,9 +187,31 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.generateToken(authentication);
         User user = (User) authentication.getPrincipal();
+        refreshTokenService.deleteByUser(user);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(LoginResponse.of(user, token));
+                .body(LoginResponse.of(user, token, refreshToken.getToken()));
+    }
+
+    @PostMapping("/refreshtoken")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenRequest dto) {
+        String refreshToken = dto.getRefreshToken();
+
+        return refreshTokenService.findByToken(refreshToken)
+                .map(refreshTokenService::verify)
+                .map(RefreshToken::getUser)
+                .map(user -> {
+                    String token = jwtProvider.generateToken(user);
+                    refreshTokenService.deleteByUser(user);
+                    RefreshToken refreshToken2 = refreshTokenService.createRefreshToken(user);
+                    return ResponseEntity.status(HttpStatus.CREATED)
+                            .body(LoginResponse.builder()
+                                    .token(token)
+                                    .refreshToken(refreshToken2.getToken())
+                                    .build()
+                            );
+                }).orElseThrow(() -> new RefreshTokenException("Refresh token not found"));
     }
 
 }
