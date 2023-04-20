@@ -59,6 +59,8 @@ class JwtAuthService extends AuthService {
       String username, String password) async {
     LoginResponse response = await _authRepository.doLogin(username, password);
     await _localStorageService.saveToDisk('user_token', response.token);
+    await _localStorageService.saveToDisk(
+        "user_refresh_token", response.refreshToken);
     return UserResponse.fromLoginResponse(response);
   }
 

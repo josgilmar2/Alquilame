@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:alquilame/main.dart';
+import 'package:alquilame/models/models.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter/material.dart';
@@ -69,8 +70,9 @@ class RestClient {
   var _httpClient;
 
   RestClient() {
-    _httpClient =
-        InterceptedClient.build(interceptors: [HeadersApiInterceptor()]);
+    _httpClient = InterceptedClient.build(
+        interceptors: [HeadersApiInterceptor()],
+        retryPolicy: ExpiredTokenRetryPolicy());
   }
 
   RestClient.withInterceptors(List<InterceptorContract> interceptors) {
@@ -210,6 +212,40 @@ class RestClient {
         throw FetchDataException(
             'Error occurred while Communication with Server with StatusCode : ${response.statusCode}');
     }
+  }
+}
+
+class ExpiredTokenRetryPolicy extends RetryPolicy {
+  late LocalStorageService _localStorageService;
+  late RestClient _client;
+
+  ExpiredTokenRetryPolicy() {
+    GetIt.I
+        .getAsync<LocalStorageService>()
+        .then((value) => _localStorageService = value);
+  }
+
+  @override
+  int maxRetryAttempts = 2;
+
+  @override
+  Future<bool> shouldAttemptRetryOnResponse(ResponseData response) async {
+    if (response.statusCode == 401) {
+      await refreshToken();
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> refreshToken() async {
+    print('refresh token');
+    String url = "/auth/refreshtoken";
+    var refreshToken =
+        await _localStorageService.getFromDisk("user_refresh_token");
+    var response = await _client.post(url, refreshToken);
+    await _localStorageService.saveToDisk(
+        "user_refresh_token", response.refreshToken);
+    await _localStorageService.saveToDisk("user_token", response.token);
   }
 }
 

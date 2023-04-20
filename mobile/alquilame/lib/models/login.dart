@@ -12,6 +12,7 @@ class LoginResponse {
   String? createdAt;
   String? role;
   String? token;
+  String? refreshToken;
 
   LoginResponse(
       {this.id,
@@ -24,7 +25,8 @@ class LoginResponse {
       this.numPublications,
       this.createdAt,
       this.role,
-      this.token});
+      this.token,
+      this.refreshToken});
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -38,6 +40,7 @@ class LoginResponse {
     createdAt = json['createdAt'];
     role = json['role'];
     token = json['token'];
+    refreshToken = json['refreshToken'];
   }
 
   Map<String, dynamic> toJson() {
@@ -53,6 +56,7 @@ class LoginResponse {
     data['createdAt'] = this.createdAt;
     data['role'] = this.role;
     data['token'] = this.token;
+    data['refreshToken'] = this.refreshToken;
     return data;
   }
 
@@ -84,6 +88,28 @@ class LoginRequest {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['username'] = username;
     data['password'] = password;
+    return data;
+  }
+}
+
+class RefreshTokenResponse {
+  int? numPublications;
+  String? token;
+  String? refreshToken;
+
+  RefreshTokenResponse({this.numPublications, this.token, this.refreshToken});
+
+  RefreshTokenResponse.fromJson(Map<String, dynamic> json) {
+    numPublications = json['numPublications'];
+    token = json['token'];
+    refreshToken = json['refreshToken'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['numPublications'] = this.numPublications;
+    data['token'] = this.token;
+    data['refreshToken'] = this.refreshToken;
     return data;
   }
 }
