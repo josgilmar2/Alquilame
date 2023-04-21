@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:alquilame/config/locator.dart';
 import 'package:alquilame/main.dart';
 import 'package:alquilame/models/models.dart';
 import 'package:file_picker/file_picker.dart';
@@ -14,37 +15,6 @@ import '../services/services.dart';
 
 class ApiConstants {
   static String baseUrl = "http://localhost:8080";
-}
-
-class AuthorizationInterceptor implements InterceptorContract {
-  late LocalStorageService _localStorageService;
-
-  AuthorizationInterceptor() {
-    GetIt.I
-        .getAsync<LocalStorageService>()
-        .then((value) => _localStorageService = value);
-  }
-
-  @override
-  Future<RequestData> interceptRequest({required RequestData data}) async {
-    try {
-      var token = await _localStorageService.getFromDisk("user_token");
-      data.headers["Authorization"] = "Bearer " + token;
-    } catch (e) {
-      print(e);
-    }
-    return Future.value(data);
-  }
-
-  @override
-  Future<ResponseData> interceptResponse({required ResponseData data}) {
-    if (data.statusCode == 401 || data.statusCode == 403) {
-      Future.delayed(Duration(seconds: 1), () {
-        Navigator.of(GlobalContext.ctx).push<void>(MyApp.route());
-      });
-    }
-    return Future.value(data);
-  }
 }
 
 class HeadersApiInterceptor implements InterceptorContract {
@@ -64,7 +34,7 @@ class HeadersApiInterceptor implements InterceptorContract {
       data;
 }
 
-@Order(-10)
+@Order(-11)
 @singleton
 class RestClient {
   var _httpClient;
@@ -212,6 +182,48 @@ class RestClient {
         throw FetchDataException(
             'Error occurred while Communication with Server with StatusCode : ${response.statusCode}');
     }
+  }
+}
+
+class AuthorizationInterceptor implements InterceptorContract {
+  late LocalStorageService _localStorageService;
+
+  AuthorizationInterceptor() {
+    GetIt.I
+        .getAsync<LocalStorageService>()
+        .then((value) => _localStorageService = value);
+  }
+
+  @override
+  Future<RequestData> interceptRequest({required RequestData data}) async {
+    try {
+      var token = await _localStorageService.getFromDisk("user_token");
+      data.headers["Authorization"] = "Bearer " + token;
+    } catch (e) {
+      print(e);
+    }
+    return Future.value(data);
+  }
+
+  @override
+  Future<ResponseData> interceptResponse({required ResponseData data}) async {
+    if (data.statusCode == 401 || data.statusCode == 403) {
+      /*Future.delayed(Duration(seconds: 1), () {
+        Navigator.of(GlobalContext.ctx).push<void>(MyApp.route());
+      });*/
+      var refreshToken =
+          await _localStorageService.getFromDisk("user_refresh_token");
+      final response = await http.post(
+          Uri.parse("${ApiConstants.baseUrl}/auth/refreshtoken"),
+          body: jsonEncode({"refreshToken": refreshToken}));
+      RefreshTokenResponse refreshTokenResponse =
+          RefreshTokenResponse.fromJson(jsonDecode(response.body));
+      await _localStorageService.saveToDisk(
+          "user_token", refreshTokenResponse.token);
+      await _localStorageService.saveToDisk(
+          "user_refresh_token", refreshTokenResponse.refreshToken);
+    }
+    return Future.value(data);
   }
 }
 

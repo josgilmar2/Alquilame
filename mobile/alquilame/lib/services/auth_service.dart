@@ -26,6 +26,7 @@ abstract class AuthService {
       String fullName,
       String password,
       String verifyPassword);
+  Future<RefreshTokenResponse> refreshToken();
 }
 
 @Order(2)
@@ -68,6 +69,7 @@ class JwtAuthService extends AuthService {
   Future<void> signOut() async {
     print("borrando token");
     await _localStorageService.deleteFromDisk("user_token");
+    await _localStorageService.deleteFromDisk("user_refresh_token");
   }
 
   @override
@@ -101,6 +103,15 @@ class JwtAuthService extends AuthService {
         fullName,
         password,
         verifyPassword);
+    return response;
+  }
+
+  @override
+  Future<RefreshTokenResponse> refreshToken() async {
+    var refreshToken =
+        await _localStorageService.getFromDisk("user_refresh_token");
+    RefreshTokenResponse response =
+        await _authRepository.doRefreshToken(refreshToken);
     return response;
   }
 }

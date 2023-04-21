@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:alquilame/models/models.dart';
 import 'package:alquilame/rest/rest.dart';
+import 'package:alquilame/services/localstorage_service.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
@@ -8,9 +9,13 @@ import 'package:injectable/injectable.dart';
 @singleton
 class AuthRepository {
   late RestClient _client;
+  late LocalStorageService _localStorageService;
 
   AuthRepository() {
     _client = GetIt.I.get<RestClient>();
+    GetIt.I
+        .getAsync<LocalStorageService>()
+        .then((value) => _localStorageService = value);
   }
 
   Future<dynamic> doLogin(String username, String password) async {
@@ -65,5 +70,13 @@ class AuthRepository {
             password: password,
             verifyPassword: verifyPassword));
     return UserResponse.fromJson(jsonDecode(jsonResponse));
+  }
+
+  Future<dynamic> doRefreshToken(String refreshToken) async {
+    String url = "/auth/refreshtoken";
+    var refreshToken =
+        await _localStorageService.getFromDisk("user_refresh_token");
+    var jsonResponse = await _client.post(url, refreshToken);
+    return RefreshTokenResponse.fromJson(jsonDecode(jsonResponse));
   }
 }
