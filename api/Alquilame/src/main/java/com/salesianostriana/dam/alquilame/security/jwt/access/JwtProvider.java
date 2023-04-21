@@ -1,4 +1,4 @@
-package com.salesianostriana.dam.alquilame.security.jwt;
+package com.salesianostriana.dam.alquilame.security.jwt.access;
 
 import com.salesianostriana.dam.alquilame.exception.jwt.JwtTokenException;
 import com.salesianostriana.dam.alquilame.user.model.User;
@@ -43,6 +43,10 @@ public class JwtProvider {
     public String generateToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
 
+        return generateToken(user);
+    }
+
+    public String generateToken(User user) {
         Date tokenExpirationDay = Date.from(LocalDateTime
                 .now()
                 .plusMinutes(jwtLifeInMinutes)
