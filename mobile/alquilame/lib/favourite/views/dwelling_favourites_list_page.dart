@@ -1,5 +1,5 @@
 import 'package:alquilame/config/locator.dart';
-import 'package:alquilame/dwelling_favourite/dwelling_favourite.dart';
+import 'package:alquilame/favourite/favourite.dart';
 import 'package:alquilame/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,9 +16,10 @@ class DwellingFavouritesListPage extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) {
+          final dwellingService = getIt<DwellingService>();
           final userService = getIt<UserService>();
-          return DwellingFavouritesBloc(userService)
-            ..add(DwellingFavouritesFetched());
+          return FavouriteBloc(dwellingService, userService)
+            ..add(DwellingFavouritesFetched2());
         },
         child: const DwellingFavouritesList(),
       ),

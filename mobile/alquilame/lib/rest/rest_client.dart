@@ -41,8 +41,8 @@ class RestClient {
 
   RestClient() {
     _httpClient = InterceptedClient.build(
-        interceptors: [HeadersApiInterceptor()],
-        retryPolicy: ExpiredTokenRetryPolicy());
+      interceptors: [HeadersApiInterceptor()],
+    );
   }
 
   RestClient.withInterceptors(List<InterceptorContract> interceptors) {
@@ -215,49 +215,28 @@ class AuthorizationInterceptor implements InterceptorContract {
           await _localStorageService.getFromDisk("user_refresh_token");
       final response = await http.post(
           Uri.parse("${ApiConstants.baseUrl}/auth/refreshtoken"),
-          body: jsonEncode({"refreshToken": refreshToken}));
-      RefreshTokenResponse refreshTokenResponse =
-          RefreshTokenResponse.fromJson(jsonDecode(response.body));
-      await _localStorageService.saveToDisk(
-          "user_token", refreshTokenResponse.token);
-      await _localStorageService.saveToDisk(
-          "user_refresh_token", refreshTokenResponse.refreshToken);
+          body: jsonEncode({"refreshToken": refreshToken}),
+          headers: {
+            "Accept": "application/json",
+            "content-type": "application/json"
+          });
+      if (response.statusCode == 201) {
+        RefreshTokenResponse refreshTokenResponse =
+            RefreshTokenResponse.fromJson(jsonDecode(response.body));
+        await _localStorageService.saveToDisk(
+            "user_token", refreshTokenResponse.token);
+        await _localStorageService.saveToDisk(
+            "user_refresh_token", refreshTokenResponse.refreshToken);
+        var request = data.request;
+        request!.headers["Authorization"] =
+            "Bearer ${refreshTokenResponse.token!}";
+        var retryResponseStream = await request.toHttpRequest().send();
+        var retryResponse = await http.Response.fromStream(retryResponseStream);
+        var datos = ResponseData.fromHttpResponse(retryResponse);
+        return Future.value(datos);
+      }
     }
     return Future.value(data);
-  }
-}
-
-class ExpiredTokenRetryPolicy extends RetryPolicy {
-  late LocalStorageService _localStorageService;
-  late RestClient _client;
-
-  ExpiredTokenRetryPolicy() {
-    GetIt.I
-        .getAsync<LocalStorageService>()
-        .then((value) => _localStorageService = value);
-  }
-
-  @override
-  int maxRetryAttempts = 2;
-
-  @override
-  Future<bool> shouldAttemptRetryOnResponse(ResponseData response) async {
-    if (response.statusCode == 401) {
-      await refreshToken();
-      return true;
-    }
-    return false;
-  }
-
-  Future<void> refreshToken() async {
-    print('refresh token');
-    String url = "/auth/refreshtoken";
-    var refreshToken =
-        await _localStorageService.getFromDisk("user_refresh_token");
-    var response = await _client.post(url, refreshToken);
-    await _localStorageService.saveToDisk(
-        "user_refresh_token", response.refreshToken);
-    await _localStorageService.saveToDisk("user_token", response.token);
   }
 }
 

@@ -2,7 +2,7 @@ import 'package:alquilame/auth/auth.dart';
 import 'package:alquilame/config/locator.dart';
 import 'package:alquilame/create_dwelling/create_dwelling.dart';
 import 'package:alquilame/dwelling/dwelling.dart';
-import 'package:alquilame/dwelling_favourite/dwelling_favourite.dart';
+import 'package:alquilame/favourite/favourite.dart';
 import 'package:alquilame/home/home.dart';
 import 'package:alquilame/main.dart';
 import 'package:alquilame/services/services.dart';

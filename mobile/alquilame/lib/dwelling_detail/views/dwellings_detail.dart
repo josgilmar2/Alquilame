@@ -20,7 +20,10 @@ class _DwellingsDetailState extends State<DwellingsDetail> {
               child: Text('Failed to fech the dwelling details'),
             );
           case DwellingDetailStatus.success:
-            return DwellingDetailItem(dwellingDetail: state.dwellingDetail);
+            return DwellingDetailScreen(
+              dwellingDetail: state.dwellingDetail,
+              userResponse: state.userResponse,
+            );
           case DwellingDetailStatus.initial:
             return const Center(child: CircularProgressIndicator());
         }

@@ -1,6 +1,5 @@
 import 'package:alquilame/config/locator.dart';
 import 'package:alquilame/dwelling_detail/dwelling_detail.dart';
-import 'package:alquilame/dwelling_favourite/dwelling_favourite.dart';
 import 'package:alquilame/favourite/favourite.dart';
 import 'package:alquilame/services/services.dart';
 import 'package:flutter/material.dart';
@@ -18,20 +17,32 @@ class DwellingDetailPage extends StatelessWidget {
         providers: [
           BlocProvider(create: (context) {
             final dwellingService = getIt<DwellingService>();
-            return DwellingDetailBloc(dwellingService)
+            final jwtAuthService = getIt<JwtAuthService>();
+            return DwellingDetailBloc(dwellingService, jwtAuthService)
               ..add(DwellingDetailFetched(id));
           }),
           BlocProvider(
             create: (context) {
               final dwellingService = getIt<DwellingService>();
-              return FavouriteBloc(dwellingService)..add(AddFavourite(id));
+              final userService = getIt<UserService>();
+              return FavouriteBloc(dwellingService, userService)
+                ..add(AddFavourite(id));
             },
           ),
           BlocProvider(
             create: (context) {
+              final dwellingService = getIt<DwellingService>();
               final userService = getIt<UserService>();
-              return DwellingFavouritesBloc(userService)
-                ..add(DwellingFavouritesFetched());
+              return FavouriteBloc(dwellingService, userService)
+                ..add(DeleteFavourite(id));
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              final dwellingService = getIt<DwellingService>();
+              final userService = getIt<UserService>();
+              return FavouriteBloc(dwellingService, userService)
+                ..add(DwellingFavouritesFetched2());
             },
           )
         ],

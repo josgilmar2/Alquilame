@@ -24,3 +24,5 @@ class DeleteFavourite extends FavouriteEvent {
   @override
   List<Object> get props => [id];
 }
+
+class DwellingFavouritesFetched2 extends FavouriteEvent {}

@@ -1,5 +1,5 @@
 import 'package:alquilame/dwelling/dwelling.dart';
-import 'package:alquilame/dwelling_favourite/dwelling_favourite.dart';
+import 'package:alquilame/favourite/favourite.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,10 +21,10 @@ class _DwellingFavouritesListState extends State<DwellingFavouritesList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DwellingFavouritesBloc, DwellingFavouritesState>(
+    return BlocBuilder<FavouriteBloc, FavouriteState>(
       builder: (context, state) {
         switch (state.status) {
-          case DwellingFavouritesStatus.failure:
+          case FavouriteStatus.failure:
             return const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -33,7 +33,7 @@ class _DwellingFavouritesListState extends State<DwellingFavouritesList> {
                 ),
               ],
             );
-          case DwellingFavouritesStatus.success:
+          case FavouriteStatus.success:
             if (state.dwellings.isEmpty) {
               return const Center(child: Text('no films'));
             }
@@ -48,7 +48,7 @@ class _DwellingFavouritesListState extends State<DwellingFavouritesList> {
                   : state.dwellings.length + 1,
               controller: _scrollController,
             );
-          case DwellingFavouritesStatus.initial:
+          case FavouriteStatus.initial:
             return const Center(child: CircularProgressIndicator());
         }
       },
@@ -65,7 +65,7 @@ class _DwellingFavouritesListState extends State<DwellingFavouritesList> {
 
   void _onScroll() {
     if (_isBottom) {
-      context.read<DwellingFavouritesBloc>().add(DwellingFavouritesFetched());
+      context.read<FavouriteBloc>().add(DwellingFavouritesFetched2());
     }
   }
 

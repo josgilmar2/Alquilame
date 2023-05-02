@@ -1,4 +1,5 @@
 import 'package:alquilame/login/login.dart';
+import 'package:alquilame/main.dart';
 import 'package:alquilame/register/register.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
@@ -39,7 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     RegisterDialog.hide(context);
                     if (state.stepCompleted == state.lastStep) {
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
+                        builder: (context) => MyApp(),
                       ));
                     }
                   },

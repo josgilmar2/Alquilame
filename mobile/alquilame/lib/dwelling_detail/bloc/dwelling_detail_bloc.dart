@@ -5,10 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class DwellingDetailBloc
     extends Bloc<DwellingDetailEvent, DwellingDetailState> {
   final DwellingService _dwellingService;
+  final JwtAuthService _jwtAuthService;
 
-  DwellingDetailBloc(DwellingService dwellingService)
+  DwellingDetailBloc(
+      DwellingService dwellingService, JwtAuthService jwtAuthService)
       : assert(dwellingService != null),
+        assert(jwtAuthService != null),
         _dwellingService = dwellingService,
+        _jwtAuthService = jwtAuthService,
         super(const DwellingDetailState()) {
     on<DwellingDetailFetched>(_onDwellingDetailFetched);
   }
@@ -19,9 +23,11 @@ class DwellingDetailBloc
     try {
       if (state.status == DwellingDetailStatus.initial) {
         final dwellingDetails = await _dwellingService.getOneDwelling(event.id);
+        final userResponse = await _jwtAuthService.getCurrentUser();
         return emitter(state.copyWith(
             status: DwellingDetailStatus.success,
-            dwellingDetail: dwellingDetails));
+            dwellingDetail: dwellingDetails,
+            userResponse: userResponse));
       }
     } catch (_) {
       emitter(state.copyWith(status: DwellingDetailStatus.failure));
