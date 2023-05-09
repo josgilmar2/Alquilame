@@ -27,6 +27,7 @@ public class OneDwellingResponse extends AllDwellingResponse{
                 .province(dwelling.getProvince().getName())
                 .image(dwelling.getImage())
                 .price(dwelling.getPrice())
+                .averageScore(dwelling.getAverageScore())
                 .address(dwelling.getAddress())
                 .description(dwelling.getDescription())
                 .type(dwelling.getType())

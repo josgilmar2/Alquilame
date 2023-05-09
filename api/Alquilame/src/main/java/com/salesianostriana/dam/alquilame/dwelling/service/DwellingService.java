@@ -8,6 +8,8 @@ import com.salesianostriana.dam.alquilame.exception.favourite.FavouriteAlreadyIn
 import com.salesianostriana.dam.alquilame.exception.favourite.FavouriteDeleteBadRequestException;
 import com.salesianostriana.dam.alquilame.exception.favourite.FavouriteOwnDwellingsException;
 import com.salesianostriana.dam.alquilame.exception.province.ProvinceNotFoundException;
+import com.salesianostriana.dam.alquilame.exception.rating.AlreadyRatedException;
+import com.salesianostriana.dam.alquilame.exception.rating.RatingOwnDwellingException;
 import com.salesianostriana.dam.alquilame.exception.user.UserDwellingsNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.user.UserNotFoundException;
 import com.salesianostriana.dam.alquilame.files.service.StorageService;
@@ -18,6 +20,10 @@ import com.salesianostriana.dam.alquilame.dwelling.dto.DwellingRequest;
 import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
 import com.salesianostriana.dam.alquilame.dwelling.repo.DwellingRepository;
 import com.salesianostriana.dam.alquilame.exception.*;
+import com.salesianostriana.dam.alquilame.rating.dto.RatingRequest;
+import com.salesianostriana.dam.alquilame.rating.model.Rating;
+import com.salesianostriana.dam.alquilame.rating.model.RatingPK;
+import com.salesianostriana.dam.alquilame.rating.service.RatingService;
 import com.salesianostriana.dam.alquilame.search.spec.GenericSpecificationBuilder;
 import com.salesianostriana.dam.alquilame.search.util.SearchCriteria;
 import com.salesianostriana.dam.alquilame.search.util.SearchCriteriaExtractor;
@@ -44,6 +50,7 @@ public class DwellingService {
     private final UserService userService;
     private final UserRepository userRepository;
     private final StorageService storageService;
+    private final RatingService ratingService;
 
     public Page<AllDwellingResponse> search(List<SearchCriteria> params, Pageable pageable) {
         GenericSpecificationBuilder<Dwelling> dwellingGenericSpecificationBuilder =
@@ -214,6 +221,33 @@ public class DwellingService {
 
         toEditImage.setImage(null);
         return dwellingRepository.save(toEditImage);
+    }
+
+    public Dwelling doRating(Long id, RatingRequest dto, User user) {
+        //Rating rating = ratingService.findOneRating(new RatingPK(user.getId(), id));
+        /*User user1 = userService.findUserRatingDwellings(user.getId())
+                .orElseThrow(() -> new UserNotFoundException(user.getId()));*/
+
+        if(ratingService.existsRating(user.getId(), id))
+            throw new AlreadyRatedException(id);
+
+        /*if(user1.getRatings().contains(rating))
+            throw new RatingOwnDwellingException(id);*/
+
+        return dwellingRepository.findFirstById(id).map(dwelling -> {
+            RatingPK pk = new RatingPK(user.getId(), id);
+            Rating newRating = Rating.builder()
+                    .id(pk)
+                    .user(user)
+                    .score(dto.getScore())
+                    .comment(dto.getComment())
+                    .build();
+            newRating.addDwelling(dwelling);
+            ratingService.save(newRating);
+            dwelling.setAverageScore(ratingService.findAverageScore());
+            dwellingRepository.save(dwelling);
+            return dwelling;
+        }).orElseThrow(() -> new DwellingNotFoundException(id));
     }
 
 }

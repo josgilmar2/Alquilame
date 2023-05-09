@@ -13,7 +13,7 @@ public class AllDwellingResponse {
 
     protected Long id;
     protected String name, province, image;
-    protected double price;
+    protected double price, averageScore;
 
     public static AllDwellingResponse of(Dwelling dwelling) {
         return AllDwellingResponse.builder()
@@ -22,6 +22,7 @@ public class AllDwellingResponse {
                 .province(dwelling.getProvince().getName())
                 .image(dwelling.getImage())
                 .price(dwelling.getPrice())
+                .averageScore(dwelling.getAverageScore())
                 .build();
     }
 }

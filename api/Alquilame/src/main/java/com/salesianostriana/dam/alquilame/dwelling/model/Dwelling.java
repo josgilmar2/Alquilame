@@ -1,16 +1,23 @@
 package com.salesianostriana.dam.alquilame.dwelling.model;
 
 import com.salesianostriana.dam.alquilame.province.model.Province;
+import com.salesianostriana.dam.alquilame.rating.model.Rating;
 import com.salesianostriana.dam.alquilame.user.model.User;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor
 @Getter @Setter
 @Builder
+@NamedEntityGraph(name = "dwelling-with-ratings",
+        attributeNodes = {
+                @NamedAttributeNode(value = "ratings")
+        })
 public class Dwelling {
 
     @Id @GeneratedValue
@@ -29,7 +36,7 @@ public class Dwelling {
     @Enumerated(EnumType.STRING)
     private Type type;
 
-    private double price, m2;
+    private double price, m2, averageScore;
 
     private int numBedrooms, numBathrooms;
 
@@ -42,6 +49,10 @@ public class Dwelling {
     @ManyToOne
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_DWELLING_USER"))
     private User user;
+
+    @OneToMany(mappedBy = "dwelling", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Rating> ratings = new ArrayList<>();
 
     //////////////////////////////////////////
     /* HELPERS de la asociación con Province*/

@@ -1,6 +1,7 @@
 package com.salesianostriana.dam.alquilame.user.model;
 
 import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
+import com.salesianostriana.dam.alquilame.rating.model.Rating;
 import com.salesianostriana.dam.alquilame.user.database.EnumSetUserRoleConverter;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -68,6 +69,10 @@ public class User implements UserDetails {
                             foreignKey = @ForeignKey(name = "FK_FAVOURITES_DWELLING")),
                 name = "favourites")
     private List<Dwelling> favourites;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Rating> ratings= new ArrayList<>();
 
     @Builder.Default
     private boolean accountNonExpired = true;

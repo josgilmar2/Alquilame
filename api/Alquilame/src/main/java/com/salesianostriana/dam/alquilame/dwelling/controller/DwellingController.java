@@ -6,6 +6,7 @@ import com.salesianostriana.dam.alquilame.dwelling.dto.OneDwellingResponse;
 import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
 import com.salesianostriana.dam.alquilame.dwelling.service.DwellingService;
 import com.salesianostriana.dam.alquilame.page.dto.PageDto;
+import com.salesianostriana.dam.alquilame.rating.dto.RatingRequest;
 import com.salesianostriana.dam.alquilame.user.model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -753,6 +754,22 @@ public class DwellingController {
         Dwelling toDeleteImage = dwellingService.deleteDwellingImage(id, user);
 
         return OneDwellingResponse.of(toDeleteImage);
+    }
+
+    @PostMapping("/{id}/rate")
+    public ResponseEntity<OneDwellingResponse> rateDwelling(@Parameter(description = "Identificador de la vivienda a la que se le quiere eliminar la imagen")
+                                                                @PathVariable Long id,
+                                                            @AuthenticationPrincipal User user,
+                                                            @RequestBody RatingRequest dto) {
+        Dwelling newRating = dwellingService.doRating(id, dto, user);
+
+        URI createdURI = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(newRating.getId()).toUri();
+
+        return ResponseEntity.created(createdURI)
+                .body(OneDwellingResponse.of(newRating));
     }
 
 }
