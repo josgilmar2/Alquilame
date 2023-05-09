@@ -5,9 +5,11 @@ import com.salesianostriana.dam.alquilame.dwelling.dto.DwellingRequest;
 import com.salesianostriana.dam.alquilame.dwelling.dto.OneDwellingResponse;
 import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
 import com.salesianostriana.dam.alquilame.dwelling.service.DwellingService;
+import com.salesianostriana.dam.alquilame.exception.user.UserNotFoundException;
 import com.salesianostriana.dam.alquilame.page.dto.PageDto;
 import com.salesianostriana.dam.alquilame.rating.dto.RatingRequest;
 import com.salesianostriana.dam.alquilame.user.model.User;
+import com.salesianostriana.dam.alquilame.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -36,6 +38,7 @@ import java.net.URI;
 public class DwellingController {
 
     private final DwellingService dwellingService;
+    private final UserService userService;
 
     @Operation(summary = "Obtiene todas las viviendas paginadas")
     @ApiResponses(value = {
@@ -257,10 +260,13 @@ public class DwellingController {
     })
     @GetMapping("/{id}")
     public OneDwellingResponse getDwellingDetails(@Parameter(description = "Identificador de la vivienda a buscar")
-                                                      @PathVariable Long id) {
+                                                      @PathVariable Long id,
+                                                  @AuthenticationPrincipal User user) {
         Dwelling result = dwellingService.findOneDwelling(id);
+        User user1 = userService.findUserFavouriteDwellings(user.getId())
+                .orElseThrow(() -> new UserNotFoundException(user.getId()));
 
-        return OneDwellingResponse.of(result);
+        return OneDwellingResponse.of(result, user1);
     }
 
     @Operation(summary = "Obtener la lista de viviendas paginadas de un usuario")
@@ -391,7 +397,7 @@ public class DwellingController {
                 .buildAndExpand(created.getId()).toUri();
 
         return ResponseEntity.created(createdURI)
-                .body(OneDwellingResponse.of(created));
+                .body(OneDwellingResponse.of(created, user));
     }
 
     @Operation(summary = "Edición de una vivienda por su identificador")
@@ -471,7 +477,7 @@ public class DwellingController {
                                                 @AuthenticationPrincipal User user) {
         Dwelling edited = dwellingService.editDwelling(id, dto, user);
 
-        return OneDwellingResponse.of(edited);
+        return OneDwellingResponse.of(edited, user);
     }
 
     @Operation(summary = "Elimina una vivienda por su identificador")
@@ -553,7 +559,7 @@ public class DwellingController {
                 .buildAndExpand(newFavourite.getId()).toUri();
 
         return ResponseEntity.created(createdURI)
-                .body(OneDwellingResponse.of(newFavourite));
+                .body(OneDwellingResponse.of(newFavourite, user));
     }
 
     @Operation(summary = "Elimina una vivienda de la lista de favoritos del usuario")
@@ -696,7 +702,7 @@ public class DwellingController {
                                          @AuthenticationPrincipal User user) {
         Dwelling toEditImage = dwellingService.editDwellingImage(id, file, user);
 
-        return OneDwellingResponse.of(toEditImage);
+        return OneDwellingResponse.of(toEditImage, user);
     }
 
     @Operation(summary = "Elimina una imagen de una vivienda obtenida por su identificador")
@@ -753,7 +759,7 @@ public class DwellingController {
                                                    @AuthenticationPrincipal User user) {
         Dwelling toDeleteImage = dwellingService.deleteDwellingImage(id, user);
 
-        return OneDwellingResponse.of(toDeleteImage);
+        return OneDwellingResponse.of(toDeleteImage, user);
     }
 
     @PostMapping("/{id}/rate")
@@ -769,7 +775,7 @@ public class DwellingController {
                 .buildAndExpand(newRating.getId()).toUri();
 
         return ResponseEntity.created(createdURI)
-                .body(OneDwellingResponse.of(newRating));
+                .body(OneDwellingResponse.of(newRating, user));
     }
 
 }

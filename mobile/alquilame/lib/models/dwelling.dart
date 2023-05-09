@@ -87,6 +87,7 @@ class OneDwellingResponse {
   late final bool hasPool;
   late final bool hasTerrace;
   late final bool hasGarage;
+  late final bool like;
   late final Owner? owner;
 
   OneDwellingResponse(
@@ -105,6 +106,7 @@ class OneDwellingResponse {
       required this.hasPool,
       required this.hasTerrace,
       required this.hasGarage,
+      required this.like,
       required this.owner});
 
   OneDwellingResponse.fromJson(Map<String, dynamic> json) {
@@ -123,6 +125,7 @@ class OneDwellingResponse {
     hasPool = json['hasPool'];
     hasTerrace = json['hasTerrace'];
     hasGarage = json['hasGarage'];
+    like = json['like'];
     owner = json['owner'] != null ? new Owner.fromJson(json['owner']) : null;
   }
 
@@ -143,6 +146,7 @@ class OneDwellingResponse {
     data['hasPool'] = this.hasPool;
     data['hasTerrace'] = this.hasTerrace;
     data['hasGarage'] = this.hasGarage;
+    data['like'] = this.like;
     if (this.owner != null) {
       data['owner'] = this.owner!.toJson();
     }

@@ -6,6 +6,7 @@ import 'package:alquilame/favourite/favourite.dart';
 import 'package:alquilame/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:like_button/like_button.dart';
 
 class DwellingDetailScreen extends StatefulWidget {
   final OneDwellingResponse? dwellingDetail;
@@ -75,47 +76,25 @@ class _DwellingDetailScreenState extends State<DwellingDetailScreen> {
                       ),
                     ),
                     const Spacer(),
-                    BlocBuilder<FavouriteBloc, FavouriteState>(
-                      key: UniqueKey(),
-                      builder: (context, state) {
-                        bool isFavourite = state.isFavourite;
-                        if (widget.dwellingDetail?.owner?.id ==
-                            widget.userResponse?.id) {
-                          return const SizedBox();
-                        }
-                        print("isFavourite: $isFavourite");
-                        return IconButton(
-                          color: Colors.white,
-                          icon: isFavourite
-                              ? const Icon(Icons.favorite)
-                              : const Icon(Icons.favorite_outline),
-                          onPressed: () {
-                            if (!isFavourite) {
-                              BlocProvider.of<FavouriteBloc>(context)
-                                  .add(AddFavourite(widget.dwellingDetail!.id));
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text(
-                                    "Vivienda añadida de favoritos correctamente."),
-                                duration: Duration(seconds: 4),
-                              ));
-                            } else {
-                              BlocProvider.of<FavouriteBloc>(context).add(
-                                  DeleteFavourite(widget.dwellingDetail!.id));
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text(
-                                    "Vivienda eliminada de favoritos correctamente."),
-                                duration: Duration(seconds: 4),
-                              ));
-                            }
-                            setState(() {
-                              isFavourite = !isFavourite;
-                            });
-                          },
-                        );
-                      },
-                    )
+                    widget.dwellingDetail?.owner?.id == widget.userResponse?.id
+                        ? const SizedBox()
+                        : LikeButton(
+                            onTap: (isLiked) {
+                              if (isLiked) {
+                                return unlike(widget.dwellingDetail!, isLiked);
+                              }
+                              return like(widget.dwellingDetail!, isLiked);
+                            },
+                            isLiked: widget.dwellingDetail?.like,
+                            likeBuilder: (isLiked) {
+                              var color = isLiked ? Colors.red : Colors.white;
+                              return Icon(
+                                Icons.favorite,
+                                color: color,
+                                size: 25,
+                              );
+                            },
+                          )
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -365,5 +344,15 @@ class _DwellingDetailScreenState extends State<DwellingDetailScreen> {
         ],
       ),
     );
+  }
+
+  Future<bool> like(OneDwellingResponse dwelling, bool bool) async {
+    context.read<FavouriteBloc>().add(AddFavourite(dwelling.id));
+    return !bool;
+  }
+
+  Future<bool> unlike(OneDwellingResponse dwelling, bool bool) async {
+    context.read<FavouriteBloc>().add(DeleteFavourite(dwelling.id));
+    return !bool;
   }
 }
