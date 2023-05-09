@@ -177,4 +177,10 @@ public class UserService {
         user1.setAvatar(null);
         return userRepository.save(user1);
     }
+
+    @Transactional
+    public Optional<User> findUserRatingDwellings(UUID id) {
+        return userRepository.findUserRatingDwellings(id);
+    }
+
 }

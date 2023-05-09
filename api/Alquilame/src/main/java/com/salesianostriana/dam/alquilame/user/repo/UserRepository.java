@@ -50,7 +50,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
     List<User> findFavouriteUserDwellings(Long idDwelling);
 
     @Query("""
-            SELECT NEW com.salesianostriana.dam.alquilame.dwelling.dto.AllDwellingResponse(f.id, f.name, f.province.name, f.image, f.price)
+            SELECT NEW com.salesianostriana.dam.alquilame.dwelling.dto.AllDwellingResponse(f.id, f.name, f.province.name, f.image, f.price, f.averageScore)
             FROM User u 
             JOIN u.favourites f
             WHERE u.id = ?1
@@ -62,5 +62,12 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
     boolean existsByEmail(String email);
 
     boolean existsByPhoneNumber(String phoneNumber);
+
+    @Query("""
+            SELECT u FROM User u
+            LEFT JOIN FETCH u.ratings
+            WHERE u.id = ?1
+            """)
+    Optional<User> findUserRatingDwellings(UUID id);
 
 }

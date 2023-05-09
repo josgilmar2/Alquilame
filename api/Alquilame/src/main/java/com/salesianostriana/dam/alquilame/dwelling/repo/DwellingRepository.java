@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DwellingRepository extends JpaRepository<Dwelling, Long>, JpaSpecificationExecutor<Dwelling> {
 
@@ -19,12 +20,15 @@ public interface DwellingRepository extends JpaRepository<Dwelling, Long>, JpaSp
     List<Dwelling> findAll();
 
     @Query("""
-            SELECT NEW com.salesianostriana.dam.alquilame.dwelling.dto.AllDwellingResponse(d.id, d.name, d.province.name, d.image, d.price)
+            SELECT NEW com.salesianostriana.dam.alquilame.dwelling.dto.AllDwellingResponse(d.id, d.name, d.province.name, d.image, d.price, d.averageScore)
             FROM Dwelling d
             WHERE d.user.username = ?1
             """)
     Page<AllDwellingResponse> findAllUserDwellings(String username, Pageable pageable);
 
-
     Page<AllDwellingResponse> findByProvinceId(Long idProvince, Pageable pageable);
+
+    @EntityGraph(value = "dwelling-with-ratings", type = EntityGraph.EntityGraphType.LOAD)
+    Optional<Dwelling> findFirstById(Long id);
+
 }

@@ -14,6 +14,9 @@ import com.salesianostriana.dam.alquilame.exception.favourite.FavouriteOwnDwelli
 import com.salesianostriana.dam.alquilame.exception.jwt.JwtTokenException;
 import com.salesianostriana.dam.alquilame.exception.province.ProvinceBadRequestDeleteException;
 import com.salesianostriana.dam.alquilame.exception.province.ProvinceNotFoundException;
+import com.salesianostriana.dam.alquilame.exception.rating.AlreadyRatedException;
+import com.salesianostriana.dam.alquilame.exception.rating.RatingNotFoundException;
+import com.salesianostriana.dam.alquilame.exception.rating.RatingOwnDwellingException;
 import com.salesianostriana.dam.alquilame.exception.storage.FileEmptyException;
 import com.salesianostriana.dam.alquilame.exception.storage.StorageException;
 import com.salesianostriana.dam.alquilame.exception.user.PasswordNotMatchException;
@@ -159,13 +162,28 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
         return buildApiError(ex.getMessage(), request, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(RatingNotFoundException.class)
+    public ResponseEntity<?> handleRatingNotFoundException(RatingNotFoundException ex, WebRequest request) {
+        return buildApiError(ex.getMessage(), request, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AlreadyRatedException.class)
+    public ResponseEntity<?> handleAlreadyRatedException(AlreadyRatedException ex, WebRequest request) {
+        return buildApiError(ex.getMessage(), request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RatingOwnDwellingException.class)
+    public ResponseEntity<?> handleRatingOwnDwellingException(RatingOwnDwellingException ex, WebRequest request) {
+        return buildApiError(ex.getMessage(), request, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({ConstraintViolationException.class})
     public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException exception, WebRequest request) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(
                         ApiErrorImpl.builder()
                                 .status(HttpStatus.BAD_REQUEST)
-                                .message("Constrtaint Validation error. Please check the sublist")
+                                .message("Constraint Validation error. Please check the sublist")
                                 .path(((ServletWebRequest) request).getRequest().getRequestURI())
                                 .subErrors(exception.getConstraintViolations()
                                         .stream()
