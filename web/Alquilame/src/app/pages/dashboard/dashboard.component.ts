@@ -1,0 +1,21 @@
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
+})
+export class DashboardComponent implements OnInit {
+
+  isSidenavVisible: boolean = false;
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+  toggleSidenav() {
+    this.isSidenavVisible = !this.isSidenavVisible;
+  }
+
+}
