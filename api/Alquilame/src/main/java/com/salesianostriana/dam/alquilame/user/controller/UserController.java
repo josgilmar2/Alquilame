@@ -281,7 +281,7 @@ public class UserController {
     })
     @GetMapping("/")
     public PageDto<UserResponse> getAllUsers(@RequestParam(value = "search", defaultValue = "") String search,
-                                              @PageableDefault(size = 20) Pageable pageable) {
+                                              @PageableDefault Pageable pageable) {
 
         return new PageDto<>(userService.findAllUsers(search, pageable));
     }

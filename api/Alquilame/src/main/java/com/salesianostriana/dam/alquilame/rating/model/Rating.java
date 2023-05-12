@@ -19,7 +19,7 @@ public class Rating {
 
     @ManyToOne
     @MapsId("user_id")
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_RATING_USER"))
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "FK_RATING_USER"), columnDefinition = "uuid")
     private User user;
 
     @ManyToOne

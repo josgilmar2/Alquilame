@@ -14,12 +14,12 @@ export class SidenavService {
     {
       titulo: 'Usuarios',
       icono: 'manage_accounts',
-      url: '/dashboard/users'
+      url: '/users'
     },
     {
       titulo: 'Viviendas',
       icono: 'apartment',
-      url: '/dashboard/dwellings'
+      url: '/dwellings'
     }
   ];
 

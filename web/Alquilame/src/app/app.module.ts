@@ -9,6 +9,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { AuthModule } from './auth/auth.module';
 import { PagesModule } from './pages/pages.module';
 import { SharedModule } from './shared/shared.module';
+import { ImagenPipe } from './core/pipes/imagen.pipe';
 @NgModule({
   declarations: [
     AppComponent,

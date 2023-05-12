@@ -31,13 +31,8 @@ export class LoginComponent implements OnInit {
 
     this.authService.login(loginRequest).subscribe(resp => {
       if (resp.role === 'ADMIN') {
-        if(this.myForm.get('remember')?.value) {
-          localStorage.setItem('token', resp.token);
-          this.router.navigate(['dashboard']);
-        } else {
-          sessionStorage.setItem('token', resp.token);
-          this.router.navigate(['dashboard']);
-        }
+        localStorage.setItem('token', resp.token);
+        this.router.navigate(['dashboard']);
       } else {
         Swal.fire('Error', 'No tienes permisos para entrar como administrador', 'error');
       }

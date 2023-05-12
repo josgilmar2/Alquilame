@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { filter, map, Subscription } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
@@ -9,16 +9,22 @@ import { UserProfile } from '../../models/interfaces/user_profile.interface';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnDestroy {
+export class NavbarComponent implements OnInit, OnDestroy {
 
   titulo: string = '';
   tituloSubs$!: Subscription;
   usuario: UserProfile = {} as UserProfile;
 
   constructor(private router: Router, private userService: UserService) {
-    this.tituloSubs$ = this.getArgumentosRuta().subscribe(({titulo}) => {
+    this.tituloSubs$ = this.getArgumentosRuta().subscribe(({ titulo }) => {
       this.titulo = titulo;
       document.title = `Alquilame Admin - ${titulo}`;
+    });
+  }
+
+  ngOnInit(): void {
+    this.userService.getProfile().subscribe(res => {
+      this.usuario = res;
     });
   }
 

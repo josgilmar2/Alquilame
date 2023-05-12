@@ -22,7 +22,7 @@ public class UserResponse {
 
     protected int numPublications;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
     protected LocalDateTime createdAt;
 
     public static UserResponse fromUser(User user) {
