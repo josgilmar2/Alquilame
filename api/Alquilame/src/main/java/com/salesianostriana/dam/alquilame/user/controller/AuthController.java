@@ -139,6 +139,14 @@ public class AuthController {
                 .body(UserResponse.fromUser(user));
     }
 
+    @PostMapping("/register/admin")
+    public ResponseEntity<UserResponse> createUserWithAdminRole(@Valid @RequestBody CreateUserDto dto) {
+        User user = userService.createUserWithAdminRole(dto);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(UserResponse.fromUser(user));
+    }
+
     @Operation(summary = "Endpoint para realizar el login de un usuario")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = {@Content(mediaType = "application/json",

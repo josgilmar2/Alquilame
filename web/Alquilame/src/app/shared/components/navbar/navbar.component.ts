@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
 import { filter, map, Subscription } from 'rxjs';
 import { UserService } from 'src/app/core/services/user.service';
-import { UserProfile } from '../../models/interfaces/user_profile.interface';
+import { UserProfile } from '../../models/interfaces/user/user_profile.interface';
 
 @Component({
   selector: 'app-navbar',

@@ -14,12 +14,32 @@ export class SidenavService {
     {
       titulo: 'Usuarios',
       icono: 'manage_accounts',
-      url: '/users'
+      url: '/dashboard/users'
+    },
+    {
+      titulo: 'Añadir Usuario',
+      icono: 'person_add',
+      url: '/dashboard/add-user'
     },
     {
       titulo: 'Viviendas',
       icono: 'apartment',
-      url: '/dwellings'
+      url: '/dashboard/dwellings'
+    },
+    {
+      titulo: 'Añadir Vivienda',
+      icono: 'add_home',
+      url: '/dashboard/add-dwelling'
+    },
+    {
+      titulo: 'Perfil',
+      icono: 'person',
+      url: '/dashboard/profile'
+    },
+    {
+      titulo: 'Logout',
+      icono: 'logout',
+      url:'/login'
     }
   ];
 

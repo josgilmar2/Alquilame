@@ -21,7 +21,6 @@ public class EditUserProfileDto {
     private String address;
 
     @NotEmpty(message = "{createUserDto.phoneNumber.notEmpty}")
-    @UniquePhoneNumber(message = "{createUserDto.phoneNumber.unique}")
     @CorrectPhoneNumber(message = "{createUserDto.phoneNumber.correct}")
     private String phoneNumber;
 }

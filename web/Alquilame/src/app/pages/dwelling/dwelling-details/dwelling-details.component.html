@@ -1,0 +1,52 @@
+<div class="container-fluid py-4">
+  <div class="col-md-12">
+    <h2 class="dwelling-title">{{ dwelling.name }}</h2>
+    <div class="dwelling-info">
+      <div class="dwelling-image-container">
+        <img src="{{ dwelling.image | imagen }}" alt="{{ dwelling.name }}" class="dwelling-image">
+      </div>
+
+      <div class="dwelling-price">
+        <strong>Precio: </strong>
+        <span>{{ dwelling.price }} €</span>
+      </div>
+      <div class="dwelling-description">
+        <strong>Descripción:</strong>
+        <p>{{ dwelling.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6 dwelling-details">
+      <h5>Detalles adicionales:</h5>
+      <ul class="list-group">
+        <li class="list-group-item"><strong>Tipo:</strong> {{ dwelling.type | titlecase }}</li>
+        <li class="list-group-item"><strong>Metros cuadrados:</strong> {{ dwelling.m2 }}</li>
+        <li class="list-group-item"><strong>Número de habitaciones:</strong> {{ dwelling.numBedrooms }}</li>
+        <li class="list-group-item"><strong>Número de baños:</strong> {{ dwelling.numBathrooms }}</li>
+        <li class="list-group-item"><strong>Tiene ascensor:</strong> {{ dwelling.hasElevator ? 'Sí' : 'No' }}</li>
+        <li class="list-group-item"><strong>Tiene piscina:</strong> {{ dwelling.hasPool ? 'Sí' : 'No' }}</li>
+        <li class="list-group-item"><strong>Tiene terraza:</strong> {{ dwelling.hasTerrace ? 'Sí' : 'No' }}</li>
+        <li class="list-group-item"><strong>Tiene garaje:</strong> {{ dwelling.hasGarage ? 'Sí' : 'No' }}</li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <h5>Propietario</h5>
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-3">
+              <img src="{{ dwelling.owner.avatar | avatar }}" alt="{{ dwelling.owner.fullName }}" class="img-fluid">
+            </div>
+            <div class="col-md-9">
+              <h5>{{ dwelling.owner.fullName }}</h5>
+              <p><strong>Username:</strong> {{ dwelling.owner.username }}</p>
+              <p><strong>Email:</strong> {{ dwelling.owner.email }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

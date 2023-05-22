@@ -5,14 +5,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ImagenPipe implements PipeTransform {
 
-  transform(avatar: string): string {
+  transform(imagen: string): unknown {
     const urlBase = 'http://localhost:8080'
-    if(!avatar) {
-      return 'https://simulacionymedicina.es/wp-content/uploads/2015/11/default-avatar-300x300-1.jpg';
-    } else if (avatar) {
-      return `${urlBase}/download/${avatar}`;
+    if(!imagen) {
+      return 'https://areajugones.sport.es/wp-content/uploads/2020/12/zoneri-021-headquarters-garrison.jpg';
+    } else if (imagen) {
+      return `${urlBase}/download/${imagen}`;
     } else {
-      return 'https://simulacionymedicina.es/wp-content/uploads/2015/11/default-avatar-300x300-1.jpg';
+      return 'https://areajugones.sport.es/wp-content/uploads/2020/12/zoneri-021-headquarters-garrison.jpg';
     }
   }
 

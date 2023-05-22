@@ -19,6 +19,7 @@ import com.salesianostriana.dam.alquilame.exception.rating.RatingNotFoundExcepti
 import com.salesianostriana.dam.alquilame.exception.rating.RatingOwnDwellingException;
 import com.salesianostriana.dam.alquilame.exception.storage.FileEmptyException;
 import com.salesianostriana.dam.alquilame.exception.storage.StorageException;
+import com.salesianostriana.dam.alquilame.exception.user.AdminsNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.user.PasswordNotMatchException;
 import com.salesianostriana.dam.alquilame.exception.user.UserDwellingsNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.user.UserNotFoundException;
@@ -175,6 +176,11 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RatingOwnDwellingException.class)
     public ResponseEntity<?> handleRatingOwnDwellingException(RatingOwnDwellingException ex, WebRequest request) {
         return buildApiError(ex.getMessage(), request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(AdminsNotFoundException.class)
+    public ResponseEntity<?> handleAdminsNotFoundException(AdminsNotFoundException ex, WebRequest request) {
+        return buildApiError(ex.getMessage(), request, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler({ConstraintViolationException.class})

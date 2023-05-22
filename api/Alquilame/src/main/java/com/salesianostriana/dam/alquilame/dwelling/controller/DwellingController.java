@@ -210,7 +210,7 @@ public class DwellingController {
     })
     @GetMapping("/")
     public PageDto<AllDwellingResponse> getAllDwelling(@RequestParam (value = "search", defaultValue = "") String search,
-                                                       @PageableDefault(size = 20) Pageable pageable) {
+                                                       @PageableDefault(size = 9) Pageable pageable) {
         return new PageDto<>(dwellingService.findAllDwellings(search, pageable));
     }
 
@@ -471,11 +471,15 @@ public class DwellingController {
                     content = @Content)
     })
     @PutMapping("/{id}")
-    @PreAuthorize("@dwellingService.findOneDwelling(#id).user.id == authentication.principal.id")
     public OneDwellingResponse editDwelling(@Parameter(description = "Identificador de la vivienda a editar")
-                                                @PathVariable Long id, @Valid @RequestBody DwellingRequest dto,
-                                                @AuthenticationPrincipal User user) {
-        Dwelling edited = dwellingService.editDwelling(id, dto, user);
+                                                @PathVariable Long id,
+                                            @Parameter(description = "Files to be uploaded",
+                                                    content = @Content(mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE))
+                                            @RequestPart("file") MultipartFile file,
+                                            @Parameter(description = "Additional request data")
+                                                @Valid @RequestPart("body") DwellingRequest dto,
+                                            @AuthenticationPrincipal User user) {
+        Dwelling edited = dwellingService.editDwelling(id, dto, user, file);
 
         return OneDwellingResponse.of(edited, user);
     }
@@ -496,7 +500,6 @@ public class DwellingController {
                     content = @Content),
     })
     @DeleteMapping("/{id}")
-    @PreAuthorize("@dwellingService.findOneDwelling(#id).user.id == authentication.principal.id")
     public ResponseEntity<?> deleteDwelling(@Parameter(description = "Identificador de la vivienda a eliminar")
                                                 @PathVariable Long id, @AuthenticationPrincipal User user) {
         dwellingService.deleteOneDwelling(id, user);

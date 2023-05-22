@@ -1,0 +1,123 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card-header p-0 position-relative mt-n4 z-index-2">
+        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+          <h6 class="text-white text-capitalize ps-3">{{dwellingToEdit.id ? 'Editar Vivienda' : 'Añadir Vivienda'}}</h6>
+        </div>
+      </div>
+      <div class="card-body px-0 pb-2 text-white">
+        <form [formGroup]="myForm" (ngSubmit)="submitVivienda()">
+          <div class="row my-2">
+            <div class="col-md-4">
+              <div class="input-group input-group-outline my-3">
+                <input type="text" class="form-control" placeholder="Nombre" formControlName="name">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group input-group-outline my-3">
+                <input type="text" class="form-control" placeholder="Direccion" formControlName="address">
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group input-group-outline my-3">
+                <textarea class="form-control" cols="30" rows="1" placeholder="Descripción" formControlName="description"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="img-container text-center form-control">
+                <input class="input-group input-group-outline my-3" type="file" name="file" accept="image/*" (change)="changeImage($any($event.target).files[0])">
+                <strong class="color-red" *ngIf="dwellingToEdit.id">¡¡¡ATENCIÓN!!! Esta es la imagen de la vivienda. Si no deseas editarla selecciona el mismo archivo de nuevo arriba en el botón</strong>
+                <img class="img-padding" *ngIf="!imgTemp && dwellingToEdit.id" src="{{dwellingToEdit.image! | imagen}}" alt="img-avatar" width="100%">
+                <img class="img-padding" *ngIf="imgTemp" [src]="imgTemp" alt="img-avatar" width="100%">
+              </div>
+              <br>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group input-group-outline my-3">
+                <select class="form-control form-select" formControlName="type">
+                  <option value="">Seleccione el tipo de vivienda</option>
+                  <option value="CASA">Casa</option>
+                  <option value="PISO">Piso</option>
+                  <option value="CHALET">Chalet</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="input-group input-group-outline my-3">
+                <select class="form-select form-control" formControlName="province">
+                  <option value="">Seleccione la provincia</option>
+                  <option *ngFor="let province of provinces" [value]="province.name">{{province.name}}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="input-group input-group-outline my-3">
+                <input type="number" min="0" class="form-control" placeholder="Precio" formControlName="price">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-outline my-3">
+                <input type="number" min="0" class="form-control" placeholder="m²" formControlName="m2">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-outline my-3">
+                <input type="number" min="0" class="form-control" placeholder="Número de habitaciones" formControlName="numBedrooms">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-outline my-3">
+                <input type="number" min="0" class="form-control" placeholder="Número de baños" formControlName="numBathrooms">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-3">
+              <div class="my-3 d-flex justify-content-center">
+                <label class="margin-label">¿Tiene Ascensor?</label>
+                <div>
+                  <input type="checkbox" class="margin-checkbox" formControlName="hasElevator">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="my-3 d-flex justify-content-center">
+                <label class="margin-label">¿Tiene Piscina?</label>
+                <div>
+                  <input type="checkbox" class="margin-checkbox" formControlName="hasPool">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="my-3 d-flex justify-content-center">
+                <label class="margin-label">¿Tiene Terraza?</label>
+                <div>
+                  <input type="checkbox" class="margin-checkbox" formControlName="hasTerrace">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="my-3 d-flex justify-content-center">
+                <label class="margin-label">¿Tiene Garaje?</label>
+                <div>
+                  <input type="checkbox" class="margin-checkbox" formControlName="hasGarage">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row my-3">
+            <div class="col-12">
+              <button type="submit" class="btn bg-gradient-primary">{{dwellingToEdit.id ? 'Editar Vivienda' : 'Añadir Vivienda'}}</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

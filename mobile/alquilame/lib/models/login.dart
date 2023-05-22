@@ -9,6 +9,7 @@ class LoginResponse {
   String? email;
   String? phoneNumber;
   int? numPublications;
+  bool? enabled;
   String? createdAt;
   String? role;
   String? token;
@@ -23,6 +24,7 @@ class LoginResponse {
       this.email,
       this.phoneNumber,
       this.numPublications,
+      this.enabled,
       this.createdAt,
       this.role,
       this.token,
@@ -37,6 +39,7 @@ class LoginResponse {
     email = json['email'];
     phoneNumber = json['phoneNumber'];
     numPublications = json['numPublications'];
+    enabled = json['enabled'];
     createdAt = json['createdAt'];
     role = json['role'];
     token = json['token'];
@@ -53,6 +56,7 @@ class LoginResponse {
     data['email'] = this.email;
     data['phoneNumber'] = this.phoneNumber;
     data['numPublications'] = this.numPublications;
+    data['enabled'] = this.enabled;
     data['createdAt'] = this.createdAt;
     data['role'] = this.role;
     data['token'] = this.token;
@@ -69,6 +73,7 @@ class LoginResponse {
     this.email = response.email;
     this.phoneNumber = response.phoneNumber;
     this.numPublications = response.numPublications;
+    this.enabled = response.enabled;
     this.role = response.role;
   }
 }

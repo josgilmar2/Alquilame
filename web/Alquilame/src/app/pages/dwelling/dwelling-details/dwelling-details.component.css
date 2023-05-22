@@ -1,0 +1,50 @@
+.dwelling-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.dwelling-info {
+  margin-bottom: 20px;
+}
+
+.dwelling-price {
+  font-weight: bold;
+}
+
+.dwelling-description {
+  margin-top: 10px;
+  text-align: justify;
+}
+
+.dwelling-details h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.dwelling-details ul {
+  list-style: none;
+  padding: 0;
+}
+
+.dwelling-details li {
+  margin-bottom: 5px;
+}
+
+.dwelling-details li strong {
+  font-weight: bold;
+}
+
+.dwelling-image-container {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f8f8f8;
+}
+
+.dwelling-image {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  border-radius: 5px;
+}

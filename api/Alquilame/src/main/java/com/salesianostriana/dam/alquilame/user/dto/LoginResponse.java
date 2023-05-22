@@ -30,6 +30,7 @@ public class LoginResponse extends UserResponse{
         email = userResponse.getEmail();
         phoneNumber = userResponse.getPhoneNumber();
         numPublications = userResponse.getNumPublications();
+        enabled = userResponse.isEnabled();
     }
 
     public static LoginResponse of (User user, String token, String refreshToken) {

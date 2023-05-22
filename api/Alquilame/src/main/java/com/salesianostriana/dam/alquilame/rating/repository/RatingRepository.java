@@ -20,4 +20,6 @@ public interface RatingRepository extends JpaRepository<Rating, RatingPK> {
     @Query("SELECT AVG(r.score) FROM Rating r")
     Double findAverageScore();
 
+
+
 }

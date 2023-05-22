@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -576,6 +580,56 @@ public class UserController {
         User toDeleteAvatar = userService.deleteAvatar(user);
 
         return UserResponse.fromUser(toDeleteAvatar);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUserByAdmin(@PathVariable UUID id) {
+        userService.deleteUserByAdmin(id);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/ban/{id}")
+    public UserResponse banUser(@PathVariable UUID id) {
+        User toBan = userService.banUser(id);
+
+        return UserResponse.fromUser(toBan);
+    }
+
+    @PutMapping("/unban/{id}")
+    public UserResponse unbanUser(@PathVariable UUID id) {
+        User toUnban = userService.unbanUser(id);
+
+        return UserResponse.fromUser(toUnban);
+    }
+
+    @GetMapping("/{id}")
+    public UserResponse getOneUser(@PathVariable UUID id) {
+        User user = userService.findOneUser(id);
+
+        return UserResponse.fromUser(user);
+    }
+
+    @PutMapping("/{id}")
+    public UserResponse editUserByAdmin(@Valid @RequestBody EditUserProfileDto dto, @PathVariable UUID id) {
+        User user = userService.editUserByAdmin(dto, id);
+
+        return UserResponse.fromUser(user);
+    }
+
+    @PutMapping("/{id}/changeAvatar")
+    public UserResponse editUserAvatarByAdmin(@RequestPart("file") MultipartFile file, @PathVariable UUID id) {
+        User toEditAvatar = userService.editAvatarByAdmin(file, id);
+
+        return UserResponse.fromUser(toEditAvatar);
+    }
+
+    @GetMapping("/admins")
+    public List<UserResponse> userAdmins() {
+        return userService.userAdmins()
+                .stream()
+                .map(UserResponse::fromUser)
+                .collect(Collectors.toList());
     }
 
 }

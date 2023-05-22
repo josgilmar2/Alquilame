@@ -22,6 +22,8 @@ public class UserResponse {
 
     protected int numPublications;
 
+    protected boolean enabled;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
     protected LocalDateTime createdAt;
 
@@ -37,6 +39,7 @@ public class UserResponse {
                 .phoneNumber(user.getPhoneNumber())
                 .role(convertRoleToString(user.getRoles()))
                 .numPublications(user.getDwellings().size())
+                .enabled(user.isEnabled())
                 .createdAt(user.getCreatedAt())
                 .build();
     }

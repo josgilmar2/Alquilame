@@ -22,6 +22,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/province")
@@ -294,8 +296,12 @@ public class ProvinceController {
                     content = @Content)
     })
     @GetMapping("/")
-    public PageDto<ProvinceResponse> getAllProvinces(@PageableDefault(size = 20) Pageable pageable) {
-        return new PageDto<>(provinceService.findAll(pageable));
+    public List<ProvinceResponse> getAllProvinces() {
+        List<Province> result = provinceService.findAll();
+
+        return result.stream()
+                .map(provinceDtoConverter::provinceToProvinceResponse)
+                .collect(Collectors.toList());
     }
 
     @Operation(summary = "Obtiene una provincia por su identificador")

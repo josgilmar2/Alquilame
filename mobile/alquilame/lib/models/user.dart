@@ -38,6 +38,7 @@ class UserResponse {
   String? phoneNumber;
   String? role;
   int? numPublications;
+  bool? enabled;
   String? createdAt;
 
   UserResponse(
@@ -50,6 +51,7 @@ class UserResponse {
       this.phoneNumber,
       this.role,
       this.numPublications,
+      this.enabled,
       this.createdAt});
 
   UserResponse.fromJson(Map<String, dynamic> json) {
@@ -62,6 +64,7 @@ class UserResponse {
     phoneNumber = json['phoneNumber'];
     role = json['role'];
     numPublications = json['numPublications'];
+    enabled = json['enabled'];
     createdAt = json['createdAt'];
   }
 
@@ -76,6 +79,7 @@ class UserResponse {
     data['phoneNumber'] = this.phoneNumber;
     data['role'] = this.role;
     data['numPublications'] = this.numPublications;
+    data['enabled'] = this.enabled;
     data['createdAt'] = this.createdAt;
     return data;
   }
@@ -89,6 +93,7 @@ class UserResponse {
     this.email = response.email;
     this.phoneNumber = response.phoneNumber;
     this.numPublications = response.numPublications;
+    this.enabled = response.enabled;
     this.role = response.role;
   }
 }

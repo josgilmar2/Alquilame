@@ -1,0 +1,24 @@
+.contenedor {
+  width: 100%;
+  display: flex;
+}
+
+.icono {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 7.5px;
+}
+
+.margin-left {
+  margin-left: 10px;
+}
+
+.color-black {
+  color: black;
+}
+
+.color-blue {
+  color: cornflowerblue;
+}

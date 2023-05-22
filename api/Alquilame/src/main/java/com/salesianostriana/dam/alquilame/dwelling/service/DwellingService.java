@@ -28,6 +28,7 @@ import com.salesianostriana.dam.alquilame.search.spec.GenericSpecificationBuilde
 import com.salesianostriana.dam.alquilame.search.util.SearchCriteria;
 import com.salesianostriana.dam.alquilame.search.util.SearchCriteriaExtractor;
 import com.salesianostriana.dam.alquilame.user.model.User;
+import com.salesianostriana.dam.alquilame.user.model.UserRole;
 import com.salesianostriana.dam.alquilame.user.repo.UserRepository;
 import com.salesianostriana.dam.alquilame.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -108,18 +109,20 @@ public class DwellingService {
         return dwellingRepository.save(result);
 
     }
-    public Dwelling editDwelling(Long id, DwellingRequest dto, User user) {
+    public Dwelling editDwelling(Long id, DwellingRequest dto, User user, MultipartFile file) {
 
         Province toEdit = provinceService.findByName(dto.getProvinceName());
         User user1 = userService.findUserWithDwellings(user.getId())
                 .orElseThrow(() -> new UserNotFoundException(user.getId()));
+        String filename = storageService.store(file);
 
-        if(user.getUsername().equalsIgnoreCase(findOneDwelling(id).getUser().getUsername())) {
+        if(user1.getUsername().equalsIgnoreCase(findOneDwelling(id).getUser().getUsername()) || user1.getRoles().contains(UserRole.ADMIN)) {
             return dwellingRepository.findById(id)
                     .map(dwelling -> {
                         dwelling.setName(dto.getName());
                         dwelling.setAddress(dto.getAddress());
                         dwelling.setDescription(dto.getDescription());
+                        dwelling.setImage(filename);
                         dwelling.setType(dto.getType());
                         dwelling.setPrice(dto.getPrice());
                         dwelling.setM2(dto.getM2());
@@ -138,14 +141,16 @@ public class DwellingService {
         }
     }
 
+    @Transactional
     public void deleteOneDwelling(Long id, User user) {
+
         Dwelling toDelete = dwellingRepository.findById(id)
                 .orElseThrow(() -> new DwellingBadRequestDeleteException(id));
 
         User user1 = userService.findUserWithDwellings(user.getId())
                 .orElseThrow(() -> new UserNotFoundException(user.getId()));
 
-        if(!user1.getDwellings().contains(toDelete))
+        if(!user1.getDwellings().contains(toDelete) && !user1.getRoles().contains(UserRole.ADMIN))
             throw new DwellingAccessDeniedException("You cannot delete dwelling with id: " + id + " because it isn't yours.");
 
         List<User> favUserDwellings = userService.findFavouriteUserDwellings(id);
@@ -153,7 +158,9 @@ public class DwellingService {
             u.getFavourites().remove(toDelete);
             userService.save(u);
         }
+
         user1.getFavourites().remove(toDelete);
+        dwellingRepository.deleteRatings(id);
         toDelete.removeUser(user1);
         dwellingRepository.delete(toDelete);
     }

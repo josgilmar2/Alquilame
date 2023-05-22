@@ -82,4 +82,18 @@ public class Dwelling {
         u.getDwellings().remove(this);
     }
 
+    ///////////////////////////////////////////////////////////////////////
+    /* Método para conseguir una descripción más pequeña para el Angular */
+    ///////////////////////////////////////////////////////////////////////
+
+    public String getShortDescription() {
+        String fullDescription = getDescription();
+        int endIndex = fullDescription.indexOf(".");
+        if (endIndex != -1) {
+            return fullDescription.substring(0, endIndex + 1);
+        } else {
+            return fullDescription;
+        }
+    }
+
 }

@@ -27,6 +27,16 @@ import java.util.stream.Collectors;
         attributeNodes = {
                 @NamedAttributeNode(value = "dwellings")
         })
+@NamedEntityGraph(name = "user-with-favourites",
+        attributeNodes = {
+            @NamedAttributeNode(value = "favourites",
+                    subgraph = "favourites-with-ratings")
+        }, subgraphs = {
+        @NamedSubgraph(name = "favourites-with-ratings",
+        attributeNodes = {
+                @NamedAttributeNode("ratings")
+        })
+})
 public class User implements UserDetails {
 
     @Id @GeneratedValue(generator = "UUID")
@@ -62,7 +72,7 @@ public class User implements UserDetails {
     @Builder.Default
     private List<Dwelling> dwellings = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinTable(joinColumns = @JoinColumn(name = "user_id",
                             foreignKey = @ForeignKey(name = "FK_FAVOURITES_USER")),
                 inverseJoinColumns = @JoinColumn(name = "dwelling_id",

@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 public class AllDwellingResponse {
 
     protected Long id;
-    protected String name, province, image;
+    protected String name, province, image, shorterDescription;
     protected double price, averageScore;
 
     public static AllDwellingResponse of(Dwelling dwelling) {
@@ -21,6 +21,7 @@ public class AllDwellingResponse {
                 .name(dwelling.getName())
                 .province(dwelling.getProvince().getName())
                 .image(dwelling.getImage())
+                .shorterDescription(dwelling.getShortDescription())
                 .price(dwelling.getPrice())
                 .averageScore(dwelling.getAverageScore())
                 .build();

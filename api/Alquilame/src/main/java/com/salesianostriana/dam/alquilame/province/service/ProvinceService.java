@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProvinceService {
@@ -20,12 +22,10 @@ public class ProvinceService {
     private final ProvinceRepository provinceRepository;
     private final ProvinceDtoConverter provinceDtoConverter;
 
-    public Page<ProvinceResponse> findAll(Pageable pageable) {
-        Page<ProvinceResponse> result = provinceRepository.findAll(pageable)
-                .map(provinceDtoConverter::provinceToProvinceResponse);
-
-        if(result.isEmpty())
-            throw new EmptyListNotFoundException(Province.class);
+    public List<Province> findAll() {
+        List<Province> result = provinceRepository.findAll();
+        if (result.isEmpty())
+            throw new RuntimeException("No provinces found");
         return result;
     }
 

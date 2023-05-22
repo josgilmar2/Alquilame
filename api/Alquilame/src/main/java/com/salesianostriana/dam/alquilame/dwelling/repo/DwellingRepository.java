@@ -6,13 +6,11 @@ import com.salesianostriana.dam.alquilame.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface DwellingRepository extends JpaRepository<Dwelling, Long>, JpaSpecificationExecutor<Dwelling> {
 
@@ -20,7 +18,7 @@ public interface DwellingRepository extends JpaRepository<Dwelling, Long>, JpaSp
     List<Dwelling> findAll();
 
     @Query("""
-            SELECT NEW com.salesianostriana.dam.alquilame.dwelling.dto.AllDwellingResponse(d.id, d.name, d.province.name, d.image, d.price, d.averageScore)
+            SELECT NEW com.salesianostriana.dam.alquilame.dwelling.dto.AllDwellingResponse(d.id, d.name, d.province.name, d.image, d.description, d.price, d.averageScore)
             FROM Dwelling d
             WHERE d.user.username = ?1
             """)
@@ -30,5 +28,16 @@ public interface DwellingRepository extends JpaRepository<Dwelling, Long>, JpaSp
 
     @EntityGraph(value = "dwelling-with-ratings", type = EntityGraph.EntityGraphType.LOAD)
     Optional<Dwelling> findFirstById(Long id);
+
+    @Query("""
+            SELECT d FROM Dwelling d
+            LEFT JOIN FETCH d.ratings r
+            WHERE r.user.id = ?1
+            """)
+    List<Dwelling> dwellingWithRatings(UUID id);
+
+    @Modifying
+    @Query("DELETE FROM Rating r WHERE r.dwelling.id = ?1")
+    void deleteRatings(Long id);
 
 }

@@ -1,14 +1,15 @@
 import { Routes, RouterModule } from "@angular/router";
 import { NgModule } from "@angular/core";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { UsersComponent } from "./users/users.component";
-import { DwellingsComponent } from "./dwellings/dwellings.component";
+import { PagesComponent } from "./pages.component";
 
 
 const routes: Routes = [
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'users', component: UsersComponent },
-  { path: 'dwellings', component: DwellingsComponent }
+  {
+    path: 'dashboard',
+    component: PagesComponent,
+    loadChildren: () => import('./child-routing.module').then(m => m.ChildRoutesRoutingModule)
+  },
+
 ];
 
 @NgModule({

@@ -1,0 +1,135 @@
+<div class="row">
+  <div class="col-12">
+    <div class="input-group input-group-outline buscador">
+      <label class="form-label"></label>
+      <input type="text" class="form-control" placeholder="Buscar usuario..." #txtTermino (keyup)="buscarUsuario(txtTermino.value)" onfocus="focused(this)" onfocusout="defocused(this)">
+    </div>
+  </div>
+</div>
+
+<div class="row animated fadeIn fast" *ngIf="cargando">
+  <div class="col-12">
+    <div class="alert alert-secondary text-center text-white buscador mt-4" role="alert">
+      <h4 class="alert-heading"></h4>
+      <i class="fa fa-spin fa-refresh text-2xl"></i>
+      <p class="mb-0">Por favor espere</p>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid py-4" *ngIf="!cargando">
+  <div class="row">
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Eliminar usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Esta a punto de eliminar a {{usuarioDelete.username}}.<br>
+            La acción no podrá revertirse. ¿Estás seguro de que quieres a este usuario?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" (click)="borrarUsuario()">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Tabla de usuarios</h6>
+          </div>
+        </div>
+        <div class="card-body px-0 pb-2">
+          <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+              <thead>
+                <tr>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Usuario</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                    Username</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                    Publicaciones</th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Banned
+                  </th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">Rol
+                  </th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Fecha
+                    registro
+                  </th>
+                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Acciones
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let usuario of usuarios">
+                  <td>
+                    <div class="d-flex px-2 py-1">
+                      <div>
+                        <img src="{{usuario.avatar | avatar}}" class="avatar avatar-sm me-3 border-radius-lg"
+                          alt="user1">
+                      </div>
+                      <div class="d-flex flex-column justify-content-center">
+                        <h6 class="mb-0 text-sm">{{usuario.fullName}}</h6>
+                        <p class="text-xs text-secondary mb-0">{{usuario.email}}</p>
+                        <p class="text-xs text-secondary mb-0">{{usuario.address == null ? 'Dirección desconocida' : usuario.address}}</p>
+                        <p class="text-xs text-secondary mb-0">{{usuario.phoneNumber}}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0 text-center">{{usuario.username}}</p>
+                  </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0 text-center">{{usuario.numPublications}}
+                    </p>
+                  </td>
+                  <td class="text-center">
+                    <i *ngIf="!usuario.enabled" class="material-icons text-2xl">done</i>
+                    <i *ngIf="usuario.enabled" class="material-icons text-2xl">close</i>
+                  </td>
+                  <td>
+                    <p class="text-xs font-weight-bold mb-0">{{usuario.role | titlecase}}</p>
+                    <p class="text-xs text-secondary mb-0" *ngIf="usuario.role === 'PROPIETARIO'">Usuario premium</p>
+                    <p class="text-xs text-secondary mb-0" *ngIf="usuario.role === 'INQUILINO'">Usuario normal</p>
+                    <p class="text-xs text-secondary mb-0" *ngIf="usuario.role === 'ADMIN'">Administrador de la
+                      aplicación</p>
+                  </td>
+                  <td class="align-middle text-center">
+                    <span class="text-secondary text-xs font-weight-bold">{{usuario.createdAt | date:
+                      'dd/MM/yyyy'}}</span>
+                  </td>
+                  <td class="align-middle">
+                    <a class="btn btn-link text-secondary mb-0" [routerLink]="['/dashboard/edit-user', usuario.id]">
+                      <i class="fa fa-pen text-xs" aria-hidden="true"></i>
+                    </a>
+                    <button class="btn btn-link text-secondary mb-0" data-bs-toggle="modal"
+                      data-bs-target="#exampleModal" (click)="usuarioAEliminar(usuario)">
+                      <i class="fa fa-trash text-xs" aria-hidden="true"></i>
+                    </button>
+                    <button class="btn btn-link text-secondary mb-0" (click)="usuarioABanear(usuario)">
+                      <i class="fa fa-ban text-xs" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="btn-group pagination" *ngIf="txtTermino.value.length === 0">
+              <button type="button" class="btn btn-primary btn-sm margin-right" (click)="pageBefore()"
+                [disabled]="page===0">&laquo;</button>
+              <button type="button" class="btn btn-primary btn-sm margin-right" *ngFor="let item of pagesNumber"
+                (click)="pageSelected(item - 1)" [disabled]="item - 1 == page">{{item}}</button>
+              <button type="button" class="btn btn-primary btn-sm margin-right" (click)="pageNext()"
+                [disabled]="page + 1 === totalPages">&raquo;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-footer></app-footer>
+</div>

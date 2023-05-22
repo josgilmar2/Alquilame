@@ -23,7 +23,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       final user = await _authService.signInWithUsernameAndPassword(
           event.username, event.password);
-      if (user != null) {
+      if (user != null || !user.enabled!) {
         _authBloc.add(UserLoggedIn(user: user));
         emitter(LoginSuccess());
         emitter(LoginInitial());

@@ -18,6 +18,7 @@ export interface User {
   role:            Role;
   phoneNumber:     string;
   numPublications: number;
+  enabled:         boolean;
   createdAt:       string;
 }
 

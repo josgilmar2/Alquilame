@@ -38,7 +38,7 @@ public class GenericSpecification<T> implements Specification<T> {
             if(isString(type)) {
                 if(value.toString().startsWith("*"))
                     return criteriaBuilder.like(root.get(key), value.toString().substring(1) + "%");
-                return criteriaBuilder.like(root.get(key), "%" + value.toString() + "%");
+                return criteriaBuilder.like(criteriaBuilder.lower(root.get(key)), "%" + value.toString().toLowerCase() + "%");
             } else if(isBoolean(type)) {
                 if(isValidBooleanValue(value.toString()))
                     return criteriaBuilder.equal(root.get(key), getBooleanValue(value.toString()));

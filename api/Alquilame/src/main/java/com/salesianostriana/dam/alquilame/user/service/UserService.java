@@ -1,11 +1,16 @@
 package com.salesianostriana.dam.alquilame.user.service;
 
 import com.salesianostriana.dam.alquilame.dwelling.dto.AllDwellingResponse;
+import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
+import com.salesianostriana.dam.alquilame.dwelling.repo.DwellingRepository;
 import com.salesianostriana.dam.alquilame.exception.EmptyListNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.favourite.FavouriteNotFoundException;
+import com.salesianostriana.dam.alquilame.exception.user.AdminsNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.user.PasswordNotMatchException;
 import com.salesianostriana.dam.alquilame.exception.user.UserNotFoundException;
 import com.salesianostriana.dam.alquilame.files.service.StorageService;
+import com.salesianostriana.dam.alquilame.rating.model.Rating;
+import com.salesianostriana.dam.alquilame.rating.repository.RatingRepository;
 import com.salesianostriana.dam.alquilame.search.spec.GenericSpecificationBuilder;
 import com.salesianostriana.dam.alquilame.search.util.SearchCriteria;
 import com.salesianostriana.dam.alquilame.search.util.SearchCriteriaExtractor;
@@ -19,14 +24,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityGraph;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +45,11 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final StorageService storageService;
+    private final DwellingRepository dwellingRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
 
     public User createUser(CreateUserDto dto, EnumSet<UserRole> roles) {
 
@@ -57,6 +72,10 @@ public class UserService {
 
     public User createUSerWitPropietarioRole(CreateUserDto dto) {
         return createUser(dto, EnumSet.of(UserRole.PROPIETARIO));
+    }
+
+    public User createUserWithAdminRole(CreateUserDto dto) {
+        return createUser(dto, EnumSet.of(UserRole.ADMIN));
     }
 
     public Optional<User> findByUsername(String username) {
@@ -96,6 +115,10 @@ public class UserService {
         return userRepository.findFavouriteUserDwellings(id);
     }
 
+    public List<User> findRatedUserDwellings(Long id) {
+        return userRepository.findRatedUserDwellings(id);
+    }
+
     public boolean existFavourite(UUID id, Long idDwelling) {
         return userRepository.existFavourite(id, idDwelling);
     }
@@ -127,16 +150,32 @@ public class UserService {
         return userRepository.findUserFavouriteDwellings(id);
     }
 
+    @Transactional
+    public Optional<User> findUserRatedDwellings(UUID id) {
+        return userRepository.findUserRatedDwellings(id);
+    }
+
+    @Transactional
     public void delete(User user) {
-        User toDelete = findUserFavouriteDwellings(user.getId())
+        User toDelete = userRepository.findById(user.getId())
                 .orElseThrow(() -> new UserNotFoundException(user.getId()));
 
-        toDelete.getFavourites().forEach(dwelling -> {
-            dwelling.removeUser(toDelete);
-        });
+        userRepository.deleteRatings(toDelete.getId());
 
+        toDelete.getFavourites().forEach(dwelling -> dwelling.removeUser(toDelete));
         userRepository.delete(toDelete);
 
+    }
+
+    @Transactional
+    public void deleteUserByAdmin(UUID id) {
+        User toDelete = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
+        userRepository.deleteRatings(toDelete.getId());
+
+        toDelete.getFavourites().forEach(dwelling -> dwelling.removeUser(toDelete));
+        userRepository.delete(toDelete);
     }
 
     public User editPassword(EditPasswordDto dto, User user) {
@@ -178,9 +217,51 @@ public class UserService {
         return userRepository.save(user1);
     }
 
-    @Transactional
-    public Optional<User> findUserRatingDwellings(UUID id) {
-        return userRepository.findUserRatingDwellings(id);
+    public User banUser(UUID id) {
+        User toBan = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
+        toBan.setEnabled(false);
+        return userRepository.save(toBan);
     }
 
+    public User unbanUser(UUID id) {
+        User toUnban = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
+        toUnban.setEnabled(true);
+        return userRepository.save(toUnban);
+    }
+
+    public User findOneUser(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public User editUserByAdmin(EditUserProfileDto dto, UUID id) {
+        return userRepository.findById(id)
+                .map(toEdit -> {
+                    toEdit.setFullName(dto.getFullName());
+                    toEdit.setAddress(dto.getAddress());
+                    toEdit.setPhoneNumber(dto.getPhoneNumber());
+                    return userRepository.save(toEdit);
+                }).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public User editAvatarByAdmin(MultipartFile file, UUID id) {
+        String filename = storageService.store(file);
+
+        return userRepository.findById(id)
+                .map(toEdit -> {
+                    toEdit.setAvatar(filename);
+                    return userRepository.save(toEdit);
+                }).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public List<User> userAdmins() {
+        List<User> result = userRepository.userAdmins("ADMIN");
+        if (result.isEmpty())
+            throw new AdminsNotFoundException();
+        return result;
+    }
 }
