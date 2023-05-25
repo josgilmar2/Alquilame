@@ -2,6 +2,7 @@ package com.salesianostriana.dam.alquilame.dwelling.model;
 
 import com.salesianostriana.dam.alquilame.province.model.Province;
 import com.salesianostriana.dam.alquilame.rating.model.Rating;
+import com.salesianostriana.dam.alquilame.rental.model.Rental;
 import com.salesianostriana.dam.alquilame.user.model.User;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
@@ -53,6 +54,10 @@ public class Dwelling {
     @OneToMany(mappedBy = "dwelling", fetch = FetchType.LAZY)
     @Builder.Default
     private List<Rating> ratings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "dwelling", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Rental> rentals = new ArrayList<>();
 
     //////////////////////////////////////////
     /* HELPERS de la asociación con Province*/

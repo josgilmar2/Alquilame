@@ -1,14 +1,14 @@
 package com.salesianostriana.dam.alquilame.user.model;
 
+import com.salesianostriana.dam.alquilame.creditcard.model.CreditCard;
 import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
 import com.salesianostriana.dam.alquilame.rating.model.Rating;
+import com.salesianostriana.dam.alquilame.rental.model.Rental;
 import com.salesianostriana.dam.alquilame.user.database.EnumSetUserRoleConverter;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Parameter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -84,6 +84,16 @@ public class User implements UserDetails {
     @Builder.Default
     private List<Rating> ratings= new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<Rental> rentals = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<CreditCard> creditCards = new ArrayList<>();
+
+    private String stripeCustomerId;
+
     @Builder.Default
     private boolean accountNonExpired = true;
 
@@ -132,5 +142,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    @PreRemove
+    public void setNullUserInRentals() {
+        rentals.forEach(rental -> rental.setUser(null));
     }
 }

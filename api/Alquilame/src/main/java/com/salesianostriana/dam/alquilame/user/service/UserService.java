@@ -5,6 +5,7 @@ import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
 import com.salesianostriana.dam.alquilame.dwelling.repo.DwellingRepository;
 import com.salesianostriana.dam.alquilame.exception.EmptyListNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.favourite.FavouriteNotFoundException;
+import com.salesianostriana.dam.alquilame.exception.rental.PaymentException;
 import com.salesianostriana.dam.alquilame.exception.user.AdminsNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.user.PasswordNotMatchException;
 import com.salesianostriana.dam.alquilame.exception.user.UserNotFoundException;
@@ -18,7 +19,12 @@ import com.salesianostriana.dam.alquilame.user.dto.*;
 import com.salesianostriana.dam.alquilame.user.model.User;
 import com.salesianostriana.dam.alquilame.user.model.UserRole;
 import com.salesianostriana.dam.alquilame.user.repo.UserRepository;
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
+import com.stripe.param.CustomerCreateParams;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -45,13 +51,30 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final StorageService storageService;
-    private final DwellingRepository dwellingRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Value("${stripe.key.secret}")
+    private String secretKey;
 
+    private Customer stripeCustomer(CreateUserDto dto) {
+        try {
+
+            Stripe.apiKey = secretKey;
+
+            CustomerCreateParams.Builder params = new CustomerCreateParams.Builder()
+                    .setEmail(dto.getEmail())
+                    .setPhone(dto.getPhoneNumber())
+                    .setName(dto.getFullName());
+
+            return Customer.create(params.build());
+
+        } catch (StripeException ex) {
+            throw new PaymentException("An error occurred while creating the customer");
+        }
+    }
 
     public User createUser(CreateUserDto dto, EnumSet<UserRole> roles) {
+
+        Customer customer = stripeCustomer(dto);
 
         User result = User.builder()
                 .username(dto.getUsername())
@@ -61,6 +84,7 @@ public class UserService {
                 .phoneNumber(dto.getPhoneNumber())
                 .password(passwordEncoder.encode(dto.getPassword()))
                 .roles(roles)
+                .stripeCustomerId(customer.getId())
                 .build();
 
         return userRepository.save(result);

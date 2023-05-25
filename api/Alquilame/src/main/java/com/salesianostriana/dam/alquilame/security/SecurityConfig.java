@@ -69,7 +69,7 @@ public class SecurityConfig {
                                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         .and()
                                 .authorizeRequests()
-                                .antMatchers("/**", "/user/**", "/dwelling/**", "/province/**").hasAnyRole("PROPIETARIO", "INQUILINO", "ADMIN")
+                                .antMatchers("/**", "/user/**", "/dwelling/**", "/province/**", "/rental/**", "/creditcard/**").hasAnyRole("PROPIETARIO", "INQUILINO", "ADMIN")
                                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

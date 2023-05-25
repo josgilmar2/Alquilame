@@ -3,6 +3,7 @@ package com.salesianostriana.dam.alquilame.error;
 import com.salesianostriana.dam.alquilame.error.model.impl.ApiErrorImpl;
 import com.salesianostriana.dam.alquilame.error.model.impl.ApiValidationSubError;
 import com.salesianostriana.dam.alquilame.exception.*;
+import com.salesianostriana.dam.alquilame.exception.creditcard.CreditCardNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.dwelling.DwellingAccessDeniedException;
 import com.salesianostriana.dam.alquilame.exception.dwelling.DwellingBadRequestDeleteException;
 import com.salesianostriana.dam.alquilame.exception.dwelling.DwellingBadRequestFavouriteException;
@@ -17,6 +18,8 @@ import com.salesianostriana.dam.alquilame.exception.province.ProvinceNotFoundExc
 import com.salesianostriana.dam.alquilame.exception.rating.AlreadyRatedException;
 import com.salesianostriana.dam.alquilame.exception.rating.RatingNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.rating.RatingOwnDwellingException;
+import com.salesianostriana.dam.alquilame.exception.rental.PaymentException;
+import com.salesianostriana.dam.alquilame.exception.rental.RentalOwnDwellingException;
 import com.salesianostriana.dam.alquilame.exception.storage.FileEmptyException;
 import com.salesianostriana.dam.alquilame.exception.storage.StorageException;
 import com.salesianostriana.dam.alquilame.exception.user.AdminsNotFoundException;
@@ -180,6 +183,21 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AdminsNotFoundException.class)
     public ResponseEntity<?> handleAdminsNotFoundException(AdminsNotFoundException ex, WebRequest request) {
+        return buildApiError(ex.getMessage(), request, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<?> handlePaymentException(PaymentException ex, WebRequest request) {
+        return buildApiError(ex.getMessage(), request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RentalOwnDwellingException.class)
+    public ResponseEntity<?> handleRentalOwnDwellingException(RentalOwnDwellingException ex, WebRequest request) {
+        return buildApiError(ex.getMessage(), request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CreditCardNotFoundException.class)
+    public ResponseEntity<?> handleCreditCardNotFoundException(CreditCardNotFoundException ex, WebRequest request) {
         return buildApiError(ex.getMessage(), request, HttpStatus.NOT_FOUND);
     }
 
