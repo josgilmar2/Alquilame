@@ -12,6 +12,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/creditcard")
@@ -34,6 +36,14 @@ public class CreditCardController {
         CreditCard toActivate = creditCardService.activateCreditCard(id, user);
 
         return CreditCardResponse.of(toActivate);
+    }
+
+    @GetMapping("/user")
+    public List<CreditCardResponse> findAllUserCreditCards(@AuthenticationPrincipal User user) {
+        return creditCardService.findAllUserCreditCards(user)
+                .stream()
+                .map(CreditCardResponse::of)
+                .collect(Collectors.toList());
     }
 
 }

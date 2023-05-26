@@ -19,8 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,10 +31,13 @@ public class CreditCardService {
     private final CreditCardRepository creditCardRepository;
     private final UserRepository userRepository;
 
-    private PaymentMethod createPaymentMethod(CreditCardRequest dto) {
+    private PaymentMethod createPaymentMethod(CreditCardRequest dto, User user) {
         try {
 
             Stripe.apiKey = secretKey;
+
+            User user1 = userRepository.findById(user.getId())
+                    .orElseThrow(() -> new UserNotFoundException(user.getId()));
 
             PaymentMethodCreateParams.Builder params = new PaymentMethodCreateParams.Builder()
                     .setType(PaymentMethodCreateParams.Type.CARD)
@@ -46,7 +48,14 @@ public class CreditCardService {
                             .setCvc(dto.getCvv())
                             .build());
 
-            return PaymentMethod.create(params.build());
+            PaymentMethod paymentMethod = PaymentMethod.create(params.build());
+
+            Map<String, Object> customerParams = new HashMap<>();
+            customerParams.put("customer", user1.getStripeCustomerId());
+            paymentMethod.attach(customerParams);
+
+            return paymentMethod;
+
 
         } catch (StripeException ex) {
             throw new PaymentException("An error occurred while creating the payment method");
@@ -77,7 +86,7 @@ public class CreditCardService {
         User user1 = userRepository.findUserWithDwellings(user.getId())
                 .orElseThrow(() -> new UserNotFoundException(user.getId()));
 
-        PaymentMethod paymentMethod = createPaymentMethod(dto);
+        PaymentMethod paymentMethod = createPaymentMethod(dto, user1);
 
         CreditCard creditCard = CreditCard.builder()
                 .number(goodCardNumber)
@@ -113,6 +122,14 @@ public class CreditCardService {
         }else {
             throw new EntityNotFoundException();
         }
+    }
+
+    public List<CreditCard> findAllUserCreditCards(User user) {
+
+        User user1 = userRepository.findById(user.getId())
+                .orElseThrow(() -> new UserNotFoundException(user.getId()));
+
+        return creditCardRepository.findAllUserCreditCards(user1);
     }
 
 }
