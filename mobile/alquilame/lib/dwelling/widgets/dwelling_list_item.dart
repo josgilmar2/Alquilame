@@ -58,19 +58,19 @@ class DwellingListItem extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14),
                           ),
-                          const Row(
+                          Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                "4,8",
-                                style: TextStyle(
+                                "${dwelling.averageScore}",
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14,
                                 ),
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.star,
                                 color: Colors.black,
                                 size: 16,

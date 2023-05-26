@@ -44,13 +44,15 @@ class Dwelling {
   late final String province;
   String? image;
   late final double price;
+  late final double averageScore;
 
   Dwelling(
       {required this.id,
       required this.name,
       required this.province,
       required this.image,
-      required this.price});
+      required this.price,
+      required this.averageScore});
 
   Dwelling.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -58,6 +60,7 @@ class Dwelling {
     province = json['province'];
     image = json['image'];
     price = json['price'];
+    averageScore = json['averageScore'];
   }
 
   Map<String, dynamic> toJson() {
@@ -67,6 +70,7 @@ class Dwelling {
     data['province'] = this.province;
     data['image'] = this.image;
     data['price'] = this.price;
+    data['averageScore'] = this.averageScore;
     return data;
   }
 }

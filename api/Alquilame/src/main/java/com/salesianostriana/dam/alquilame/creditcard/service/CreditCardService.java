@@ -58,6 +58,7 @@ public class CreditCardService {
 
 
         } catch (StripeException ex) {
+            System.out.println(ex.toString());
             throw new PaymentException("An error occurred while creating the payment method");
         }
     }

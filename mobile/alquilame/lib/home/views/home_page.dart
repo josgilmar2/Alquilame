@@ -1,6 +1,8 @@
 import 'package:alquilame/auth/auth.dart';
 import 'package:alquilame/config/locator.dart';
+import 'package:alquilame/create_credit_card/views/create_credit_card_page.dart';
 import 'package:alquilame/create_dwelling/create_dwelling.dart';
+import 'package:alquilame/credit_card/views/credit_card_page.dart';
 import 'package:alquilame/dwelling/dwelling.dart';
 import 'package:alquilame/favourite/favourite.dart';
 import 'package:alquilame/home/home.dart';
@@ -155,6 +157,16 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const EditPasswordPage(),
+                              ));
+                        }),
+                    ProfileList(
+                        title: "Métodos de pago",
+                        iconData: Icons.euro,
+                        onPress: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CreditCardPage(),
                               ));
                         }),
                     ProfileList(
