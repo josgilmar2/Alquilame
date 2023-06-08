@@ -83,4 +83,13 @@ class DwellingService {
     }
     throw Exception("Failed to create dwelling");
   }
+
+  Future<OneDwellingResponse> rateDwelling(
+      int id, double score, String? comment) async {
+    String? token = _localStorageService.getFromDisk("user_token");
+    if (token != null) {
+      return _dwellingRepository.rateDwelling(id, score, comment);
+    }
+    throw Exception("Failed to rate dwelling");
+  }
 }

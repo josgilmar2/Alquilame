@@ -63,7 +63,7 @@ class DwellingListItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                "${dwelling.averageScore}",
+                                dwelling.averageScore.toStringAsFixed(2),
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,

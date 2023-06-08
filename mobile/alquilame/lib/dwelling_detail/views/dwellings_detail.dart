@@ -23,6 +23,7 @@ class _DwellingsDetailState extends State<DwellingsDetail> {
             return DwellingDetailScreen(
               dwellingDetail: state.dwellingDetail,
               userResponse: state.userResponse,
+              superContext: context,
             );
           case DwellingDetailStatus.initial:
             return const Center(child: CircularProgressIndicator());

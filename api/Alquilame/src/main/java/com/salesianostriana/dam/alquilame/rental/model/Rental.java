@@ -20,7 +20,9 @@ public class Rental {
 
     private double totalPrice;
 
-    private String stipePaymentIntentId;
+    private String stripePaymentIntentId;
+
+    private boolean paid;
 
     @ManyToOne
     @JoinColumn(name = "dwelling_id", foreignKey = @ForeignKey(name = "FK_RENTAL_DWELLING"))

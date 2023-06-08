@@ -47,6 +47,7 @@ dependencies:
   file_picker: ^5.2.5
   like_button: ^2.0.5
   flutter_credit_card: ^3.0.6
+  flutter_rating_bar: ^4.0.1
 
 
   # The following adds the Cupertino Icons font to your application.

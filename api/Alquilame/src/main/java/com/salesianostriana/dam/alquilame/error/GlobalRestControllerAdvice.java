@@ -19,6 +19,7 @@ import com.salesianostriana.dam.alquilame.exception.rating.AlreadyRatedException
 import com.salesianostriana.dam.alquilame.exception.rating.RatingNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.rating.RatingOwnDwellingException;
 import com.salesianostriana.dam.alquilame.exception.rental.PaymentException;
+import com.salesianostriana.dam.alquilame.exception.rental.RentalNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.rental.RentalOwnDwellingException;
 import com.salesianostriana.dam.alquilame.exception.storage.FileEmptyException;
 import com.salesianostriana.dam.alquilame.exception.storage.StorageException;
@@ -198,6 +199,11 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CreditCardNotFoundException.class)
     public ResponseEntity<?> handleCreditCardNotFoundException(CreditCardNotFoundException ex, WebRequest request) {
+        return buildApiError(ex.getMessage(), request, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RentalNotFoundException.class)
+    public ResponseEntity<?> handleRentalNotFoundException(RentalNotFoundException ex, WebRequest request) {
         return buildApiError(ex.getMessage(), request, HttpStatus.NOT_FOUND);
     }
 

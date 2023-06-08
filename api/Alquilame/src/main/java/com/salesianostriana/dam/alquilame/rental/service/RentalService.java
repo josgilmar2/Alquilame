@@ -7,6 +7,7 @@ import com.salesianostriana.dam.alquilame.dwelling.repo.DwellingRepository;
 import com.salesianostriana.dam.alquilame.exception.creditcard.CreditCardNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.dwelling.DwellingNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.rental.PaymentException;
+import com.salesianostriana.dam.alquilame.exception.rental.RentalNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.rental.RentalOwnDwellingException;
 import com.salesianostriana.dam.alquilame.exception.user.UserNotFoundException;
 import com.salesianostriana.dam.alquilame.rental.dto.RentalRequest;
@@ -77,7 +78,8 @@ public class RentalService {
                     .startDate(dto.getStartDate())
                     .endDate(dto.getEndDate())
                     .totalPrice(totalPrice)
-                    .stipePaymentIntentId(paymentIntent.getId())
+                    .stripePaymentIntentId(paymentIntent.getId())
+                    .paid(false)
                     .build();
 
             rental.addDwelling(dwelling);
@@ -100,11 +102,18 @@ public class RentalService {
             CreditCard creditCard = creditCardRepository.findFirstActiveCreditCardByUser(user1)
                     .orElseThrow(CreditCardNotFoundException::new);
 
+            Rental rental = rentalRepository.findByStripePaymentIntentId(paymentIntentId)
+                    .orElseThrow(() -> new RentalNotFoundException(paymentIntentId));
+
             PaymentIntent paymentIntent = PaymentIntent.retrieve(paymentIntentId);
             PaymentIntentConfirmParams.Builder paramsBuilder = new PaymentIntentConfirmParams.Builder()
                     .setPaymentMethod(creditCard.getStripePaymentMethodId());
 
             PaymentIntentConfirmParams params = paramsBuilder.build();
+
+            rental.setPaid(true);
+
+            rentalRepository.save(rental);
 
             paymentIntent.confirm(params);
 

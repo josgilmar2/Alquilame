@@ -41,7 +41,7 @@ public class RentalController {
     }
 
     @PostMapping("/confirm/{pagoId}")
-    public ResponseEntity<String> confirmRental(@PathVariable String pagoId, @AuthenticationPrincipal User user) {
+    public ResponseEntity<?> confirmRental(@PathVariable String pagoId, @AuthenticationPrincipal User user) {
         rentalService.confirmPaymentIntent(pagoId, user);
         return ResponseEntity.status(HttpStatus.OK)
                 .build();

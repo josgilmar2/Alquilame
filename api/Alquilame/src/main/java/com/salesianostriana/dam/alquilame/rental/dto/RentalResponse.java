@@ -17,6 +17,7 @@ public class RentalResponse {
     private double totalPrice;
     private String userEmail, dwelling, stripePaymentIntentId;
     private LocalDate startDate, endDate;
+    private boolean paid;
 
     public static RentalResponse of(Rental rental) {
         return RentalResponse.builder()
@@ -24,9 +25,10 @@ public class RentalResponse {
                 .totalPrice(rental.getTotalPrice())
                 .userEmail(rental.getUser().getEmail())
                 .dwelling(rental.getDwelling().getName())
-                .stripePaymentIntentId(rental.getStipePaymentIntentId())
+                .stripePaymentIntentId(rental.getStripePaymentIntentId())
                 .startDate(rental.getStartDate())
                 .endDate(rental.getEndDate())
+                .paid(rental.isPaid())
                 .build();
     }
 

@@ -68,19 +68,20 @@ class _DwellingUserListItemState extends State<DwellingUserListItem> {
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14),
                             ),
-                            const Row(
+                            Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
-                                  "4,8",
-                                  style: TextStyle(
+                                  widget.dwelling.averageScore
+                                      .toStringAsFixed(2),
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
                                 ),
-                                Icon(
+                                const Icon(
                                   Icons.star,
                                   color: Colors.black,
                                   size: 16,

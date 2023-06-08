@@ -69,12 +69,7 @@ class _CreateCreditCardSWState extends State<CreateCreditCardSW> {
       },
       onSuccess: (context, state) {
         CreateCreditCardDialog.hide(context);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MyApp(),
-          ),
-        );
+        Navigator.of(context).popUntil((route) => route.isFirst);
       },
       onFailure: (context, state) {
         ScaffoldMessenger.of(context).showSnackBar(

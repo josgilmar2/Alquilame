@@ -81,6 +81,7 @@ class OneDwellingResponse {
   late final String province;
   String? image;
   late final double price;
+  double? averageScore;
   late final String address;
   late final String description;
   late final String type;
@@ -100,6 +101,7 @@ class OneDwellingResponse {
       required this.province,
       this.image,
       required this.price,
+      this.averageScore,
       required this.address,
       required this.description,
       required this.type,
@@ -119,6 +121,7 @@ class OneDwellingResponse {
     province = json['province'];
     image = json['image'];
     price = json['price'];
+    averageScore = json['averageScore'];
     address = json['address'];
     description = json['description'];
     type = json['type'];
@@ -140,6 +143,7 @@ class OneDwellingResponse {
     data['province'] = this.province;
     data['image'] = this.image;
     data['price'] = this.price;
+    data['averageScore'] = this.averageScore;
     data['address'] = this.address;
     data['description'] = this.description;
     data['type'] = this.type;
@@ -272,6 +276,25 @@ class DwellingRequest {
     data['hasTerrace'] = this.hasTerrace;
     data['hasGarage'] = this.hasGarage;
     data['provinceName'] = this.provinceName;
+    return data;
+  }
+}
+
+class RatingRequest {
+  double? score;
+  String? comment;
+
+  RatingRequest({this.score, this.comment});
+
+  RatingRequest.fromJson(Map<String, dynamic> json) {
+    score = json['score'];
+    comment = json['comment'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['score'] = this.score;
+    data['comment'] = this.comment;
     return data;
   }
 }

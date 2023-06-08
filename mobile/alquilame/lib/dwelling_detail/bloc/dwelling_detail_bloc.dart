@@ -15,6 +15,7 @@ class DwellingDetailBloc
         _jwtAuthService = jwtAuthService,
         super(const DwellingDetailState()) {
     on<DwellingDetailFetched>(_onDwellingDetailFetched);
+    on<RateEvent>(_onRateEvent);
   }
 
   Future<void> _onDwellingDetailFetched(
@@ -29,6 +30,22 @@ class DwellingDetailBloc
             dwellingDetail: dwellingDetails,
             userResponse: userResponse));
       }
+    } catch (_) {
+      emitter(state.copyWith(status: DwellingDetailStatus.failure));
+    }
+  }
+
+  Future<void> _onRateEvent(
+      RateEvent event, Emitter<DwellingDetailState> emitter) async {
+    if (state.props.isEmpty) return;
+    try {
+      final dwellingDetails = await _dwellingService.rateDwelling(
+          event.id, event.score, event.comment);
+      final userResponse = await _jwtAuthService.getCurrentUser();
+      return emitter(state.copyWith(
+          status: DwellingDetailStatus.success,
+          dwellingDetail: dwellingDetails,
+          userResponse: userResponse));
     } catch (_) {
       emitter(state.copyWith(status: DwellingDetailStatus.failure));
     }

@@ -12,6 +12,7 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
     boolean existsByDwellingAndEndDateGreaterThanEqualAndStartDateLessThanEqual
             (Dwelling dwelling, LocalDate startDate, LocalDate endDate);
 
+    Optional<Rental> findByStripePaymentIntentId(String stripePaymentIntentId);
 
 
 }

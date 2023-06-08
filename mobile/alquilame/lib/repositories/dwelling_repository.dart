@@ -91,4 +91,12 @@ class DwellingRepository {
     String url = "/dwelling/$id";
     await _client.delete(url);
   }
+
+  Future<OneDwellingResponse> rateDwelling(
+      int id, double score, String? comment) async {
+    String url = "/dwelling/$id/rate";
+    var jsonResponse =
+        await _client.post(url, RatingRequest(score: score, comment: comment));
+    return OneDwellingResponse.fromJson(jsonDecode(jsonResponse));
+  }
 }

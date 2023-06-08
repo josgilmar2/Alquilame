@@ -1,25 +1,35 @@
 import 'dart:convert';
 
+import 'package:alquilame/create_rental/views/create_rental_page.dart';
 import 'package:alquilame/dwelling/dwelling.dart';
 import 'package:alquilame/dwelling_detail/dwelling_detail.dart';
 import 'package:alquilame/favourite/favourite.dart';
 import 'package:alquilame/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:like_button/like_button.dart';
 
 class DwellingDetailScreen extends StatefulWidget {
   final OneDwellingResponse? dwellingDetail;
   final UserResponse? userResponse;
+  final BuildContext superContext;
 
   const DwellingDetailScreen(
-      {super.key, required this.dwellingDetail, required this.userResponse});
+      {super.key,
+      required this.dwellingDetail,
+      required this.userResponse,
+      required this.superContext});
 
   @override
   State<DwellingDetailScreen> createState() => _DwellingDetailScreenState();
 }
 
 class _DwellingDetailScreenState extends State<DwellingDetailScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  double rating = 1.0;
+  final comentarioController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,28 +121,159 @@ class _DwellingDetailScreenState extends State<DwellingDetailScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                const Row(
+                                Row(
                                   children: <Widget>[
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.black,
+                                    Text(
+                                      "${widget.dwellingDetail?.averageScore?.toStringAsFixed(2)}",
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
                                     ),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.black,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.black,
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.black,
-                                    ),
-                                    Icon(
-                                      Icons.star_border,
-                                      color: Colors.black,
-                                    ),
+                                    widget.dwellingDetail?.owner?.id ==
+                                            widget.userResponse?.id
+                                        ? const Icon(
+                                            Icons.star,
+                                            color: Colors.black,
+                                          )
+                                        : IconButton(
+                                            color: Colors.black,
+                                            icon: const Icon(Icons.star),
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                      "Valora ${widget.dwellingDetail?.name}",
+                                                    ),
+                                                    content: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        Form(
+                                                          key: _formKey,
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        bottom:
+                                                                            5,
+                                                                        top: 40,
+                                                                        left:
+                                                                            20,
+                                                                        right:
+                                                                            20),
+                                                                child: Center(
+                                                                  child: RatingBar
+                                                                      .builder(
+                                                                    initialRating:
+                                                                        3,
+                                                                    minRating:
+                                                                        1,
+                                                                    direction: Axis
+                                                                        .horizontal,
+                                                                    allowHalfRating:
+                                                                        true,
+                                                                    itemCount:
+                                                                        5,
+                                                                    itemPadding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        horizontal:
+                                                                            4.0),
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                                _) =>
+                                                                            const Icon(
+                                                                      Icons
+                                                                          .star,
+                                                                      color: Colors
+                                                                          .black,
+                                                                    ),
+                                                                    onRatingUpdate:
+                                                                        (newRating) {
+                                                                      rating =
+                                                                          newRating;
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(20),
+                                                                child:
+                                                                    TextFormField(
+                                                                  keyboardType:
+                                                                      TextInputType
+                                                                          .multiline,
+                                                                  maxLines:
+                                                                      null,
+                                                                  controller:
+                                                                      comentarioController,
+                                                                  decoration:
+                                                                      const InputDecoration(
+                                                                    hintText:
+                                                                        'Dinos tu opinión',
+                                                                    labelText:
+                                                                        'Comentario',
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () =>
+                                                            Navigator.pop(
+                                                                context),
+                                                        child: const Text(
+                                                          "Cancelar",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.red),
+                                                        ),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () {
+                                                          widget.superContext
+                                                              .read<
+                                                                  DwellingDetailBloc>()
+                                                              .add(RateEvent(
+                                                                  widget
+                                                                      .dwellingDetail!
+                                                                      .id,
+                                                                  rating,
+                                                                  comentarioController
+                                                                      .text));
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: const Text(
+                                                          'Valorar',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
+                                            },
+                                          ),
                                   ],
                                 ),
                                 Text.rich(
@@ -225,28 +366,40 @@ class _DwellingDetailScreenState extends State<DwellingDetailScreen> {
                         ],
                       ),
                       const SizedBox(height: 30.0),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0)),
-                            backgroundColor: Colors.black,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16.0,
-                              horizontal: 32.0,
+                      widget.dwellingDetail?.owner?.id ==
+                              widget.userResponse?.id
+                          ? const SizedBox()
+                          : SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(30.0)),
+                                  backgroundColor: Colors.black,
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16.0,
+                                    horizontal: 32.0,
+                                  ),
+                                ),
+                                child: const Text(
+                                  "Alquilar ahora",
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.normal),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CreateRentalPage(
+                                        dwellingResponse: widget.dwellingDetail,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                          child: const Text(
-                            "Alquilar ahora",
-                            style: TextStyle(fontWeight: FontWeight.normal),
-                          ),
-                          onPressed: () {
-                            //ESTO SE HARÁ EN EL PROYECTO FINAL
-                          },
-                        ),
-                      ),
                       const SizedBox(height: 30.0),
                       Text(
                         "Description".toUpperCase(),
