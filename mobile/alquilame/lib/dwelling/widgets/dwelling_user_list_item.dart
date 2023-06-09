@@ -1,6 +1,7 @@
 import 'package:alquilame/dwelling/dwelling.dart';
 import 'package:alquilame/dwelling_detail/dwelling_detail.dart';
 import 'package:alquilame/models/models.dart';
+import 'package:alquilame/rest/rest_client.dart';
 import 'package:flutter/material.dart';
 
 class DwellingUserListItem extends StatefulWidget {
@@ -31,7 +32,7 @@ class _DwellingUserListItemState extends State<DwellingUserListItem> {
                 Ink.image(
                   image: NetworkImage(widget.dwelling.image == null
                       ? "https://areajugones.sport.es/wp-content/uploads/2020/12/zoneri-021-headquarters-garrison.jpg"
-                      : "http://localhost:8080/download/${widget.dwelling.image}"),
+                      : "${ApiConstants.baseUrl}/download/${widget.dwelling.image}"),
                   height: 240,
                   fit: BoxFit.cover,
                   child: InkWell(

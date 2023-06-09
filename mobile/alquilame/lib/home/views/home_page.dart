@@ -7,6 +7,7 @@ import 'package:alquilame/dwelling/dwelling.dart';
 import 'package:alquilame/favourite/favourite.dart';
 import 'package:alquilame/home/home.dart';
 import 'package:alquilame/main.dart';
+import 'package:alquilame/rest/rest_client.dart';
 import 'package:alquilame/services/services.dart';
 import 'package:alquilame/user_manage/user_manage.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(100),
                               child: Image.network(widget.user.avatar == null
                                   ? "https://simulacionymedicina.es/wp-content/uploads/2015/11/default-avatar-300x300-1.jpg"
-                                  : "http://localhost:8080/download/${widget.user.avatar}"),
+                                  : "${ApiConstants.baseUrl}/download/${widget.user.avatar}"),
                             )),
                         Positioned(
                           bottom: 0,
@@ -300,12 +301,44 @@ class _HomePageState extends State<HomePage> {
                       title: "Eliminar perfil",
                       iconData: Icons.delete_forever_outlined,
                       onPress: () async {
-                        BlocProvider.of<AuthBloc>(context).add(UserDelete());
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MyApp(),
-                            ));
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text(
+                                  '¿Quiéres eliminar esta vivienda de tu lista?'),
+                              content: const Text(
+                                  'Recuerda que esta acción no se puede deshacer.'),
+                              actions: [
+                                TextButton(
+                                  child: const Text(
+                                    'CANCELAR',
+                                    style: TextStyle(color: Colors.black87),
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                                TextButton(
+                                  onPressed: () async {
+                                    BlocProvider.of<AuthBloc>(context)
+                                        .add(UserDelete());
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => MyApp(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    "BORRAR",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
                       },
                       textColor: Colors.red,
                     )

@@ -1,5 +1,6 @@
 import 'package:alquilame/dwelling_detail/views/dwelling_detail_page.dart';
 import 'package:alquilame/models/models.dart';
+import 'package:alquilame/rest/rest.dart';
 import 'package:flutter/material.dart';
 
 class DwellingListItem extends StatelessWidget {
@@ -21,7 +22,7 @@ class DwellingListItem extends StatelessWidget {
                 Ink.image(
                   image: NetworkImage(dwelling.image == null
                       ? "https://areajugones.sport.es/wp-content/uploads/2020/12/zoneri-021-headquarters-garrison.jpg"
-                      : "http://localhost:8080/download/${dwelling.image}"),
+                      : "${ApiConstants.baseUrl}/download/${dwelling.image}"),
                   height: 240,
                   fit: BoxFit.cover,
                   child: InkWell(

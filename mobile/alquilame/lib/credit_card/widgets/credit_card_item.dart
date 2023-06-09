@@ -91,58 +91,25 @@ class CreditCardItem extends StatelessWidget {
                   color: Colors.white,
                 ),
               ],
-            )
+            ),
+            creditCard.active!
+                ? const Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "Activada",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Icon(
+                        Icons.check,
+                        color: Colors.white,
+                      )
+                    ],
+                  )
+                : const SizedBox(),
           ],
         ),
       ),
-      // child: Container(
-      //   margin: const EdgeInsets.all(16),
-      //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      //   width: double.infinity,
-      //   decoration: BoxDecoration(
-      //     color: Colors.white,
-      //     border: Border.all(
-      //       color: creditCard.active! ? Colors.black : Colors.grey,
-      //       width: creditCard.active! ? 4 : 2,
-      //     ),
-      //     borderRadius: BorderRadius.circular(10),
-      //     image:
-      //         DecorationImage(opacity: 0.20, fit: BoxFit.cover, image: image),
-      //   ),
-      //   child: Column(
-      //     crossAxisAlignment: CrossAxisAlignment.start,
-      //     children: <Widget>[
-      //       Row(
-      //         mainAxisSize: MainAxisSize.max,
-      //         mainAxisAlignment: MainAxisAlignment.center,
-      //         children: <Widget>[
-      //           Text(
-      //             creditCard.number!,
-      //             style: const TextStyle(
-      //                 fontWeight: FontWeight.w700, fontSize: 20),
-      //           )
-      //         ],
-      //       ),
-      //       const SizedBox(height: 10),
-      //       Row(
-      //         mainAxisSize: MainAxisSize.max,
-      //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //         children: <Widget>[
-      //           Text(
-      //             creditCard.holder!,
-      //             style: const TextStyle(
-      //                 fontWeight: FontWeight.bold, fontSize: 17),
-      //           ),
-      //           Text(
-      //             creditCard.expiredDate!,
-      //             style: const TextStyle(
-      //                 fontWeight: FontWeight.bold, fontSize: 17),
-      //           ),
-      //         ],
-      //       )
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

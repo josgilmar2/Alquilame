@@ -5,6 +5,7 @@ import 'package:alquilame/dwelling/dwelling.dart';
 import 'package:alquilame/dwelling_detail/dwelling_detail.dart';
 import 'package:alquilame/favourite/favourite.dart';
 import 'package:alquilame/models/models.dart';
+import 'package:alquilame/rest/rest_client.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -49,7 +50,7 @@ class _DwellingDetailScreenState extends State<DwellingDetailScreen> {
               child: Image.network(
                   widget.dwellingDetail?.image == null
                       ? "https://areajugones.sport.es/wp-content/uploads/2020/12/zoneri-021-headquarters-garrison.jpg"
-                      : "http://localhost:8080/download/${widget.dwellingDetail?.image}",
+                      : "${ApiConstants.baseUrl}/download/${widget.dwellingDetail?.image}",
                   fit: BoxFit.cover)),
           SingleChildScrollView(
             padding: const EdgeInsets.only(top: 16.0, bottom: 20.0),
@@ -443,7 +444,7 @@ class _DwellingDetailScreenState extends State<DwellingDetailScreen> {
                                                         ?.avatar ==
                                                     null
                                                 ? "https://e7.pngegg.com/pngimages/323/705/png-clipart-user-profile-get-em-cardiovascular-disease-zingah-avatar-miscellaneous-white.png"
-                                                : "http://localhost:8080/download/${widget.dwellingDetail?.owner?.avatar}"))),
+                                                : "${ApiConstants.baseUrl}/download/${widget.dwellingDetail?.owner?.avatar}"))),
                                   ),
                                 ),
                                 Column(

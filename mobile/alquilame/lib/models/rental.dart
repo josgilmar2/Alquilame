@@ -40,8 +40,8 @@ class RentalResponse {
 }
 
 class RentalRequest {
-  DateTime? startDate;
-  DateTime? endDate;
+  String? startDate;
+  String? endDate;
 
   RentalRequest({this.startDate, this.endDate});
 

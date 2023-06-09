@@ -109,8 +109,30 @@ class _CreateRentalPageState extends State<CreateRentalPage> {
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        createRentalBloc.createRental();
-                                        createRentalBloc.cancelRental();
+                                        createRentalBloc
+                                            .createRental()
+                                            .then((value) {
+                                          createRentalBloc
+                                              .cancelRental(
+                                                  value.stripePaymentIntentId!)
+                                              .then((value) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    "Se ha cancelado el pago con éxito"),
+                                              ),
+                                            );
+                                          });
+                                        }).catchError((onError) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                  onError.message.toString()),
+                                            ),
+                                          );
+                                        });
                                         Navigator.pop(context);
                                       },
                                       child: const Text(
@@ -120,13 +142,34 @@ class _CreateRentalPageState extends State<CreateRentalPage> {
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        createRentalBloc.createRental();
-                                        createRentalBloc.confirmRental();
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => MyApp()),
-                                        );
+                                        createRentalBloc
+                                            .createRental()
+                                            .then((value) {
+                                          createRentalBloc
+                                              .confirmRental(
+                                                  value.stripePaymentIntentId!)
+                                              .then((value) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    "Se ha alquilado la vivienda con éxito"),
+                                              ),
+                                            );
+                                          });
+                                        }).catchError((onError) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  "¡¡¡ERROR!!! Ya existe un alquiler durante estas fechas"),
+                                              duration: Duration(seconds: 5),
+                                            ),
+                                          );
+                                        });
+
+                                        Navigator.of(context)
+                                            .popUntil((route) => route.isFirst);
                                       },
                                       child: const Text(
                                         "Alquilar",

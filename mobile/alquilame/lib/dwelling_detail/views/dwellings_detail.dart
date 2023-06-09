@@ -16,8 +16,20 @@ class _DwellingsDetailState extends State<DwellingsDetail> {
       builder: (context, state) {
         switch (state.status) {
           case DwellingDetailStatus.failure:
-            return const Center(
-              child: Text('Failed to fech the dwelling details'),
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text("No se puede valorar una vivienda dos veces"),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("Volver"),
+                  ),
+                ],
+              ),
             );
           case DwellingDetailStatus.success:
             return DwellingDetailScreen(

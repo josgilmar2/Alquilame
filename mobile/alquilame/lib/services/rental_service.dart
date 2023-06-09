@@ -1,6 +1,7 @@
 import 'package:alquilame/config/locator.dart';
 import 'package:alquilame/models/models.dart';
 import 'package:alquilame/repositories/rental_repository.dart';
+import 'package:alquilame/rest/rest_client.dart';
 import 'package:alquilame/services/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
@@ -25,7 +26,7 @@ class RentalService {
           await _rentalRepository.createRental(id, request);
       return response;
     }
-    throw Exception("Failed to create rental");
+    throw BadRequestException();
   }
 
   Future<dynamic> confirmRental(String stripeId) async {

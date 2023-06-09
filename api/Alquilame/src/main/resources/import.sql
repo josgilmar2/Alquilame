@@ -108,7 +108,7 @@ insert into rating (user_id, dwelling_id, score, comment) values ('75577a8a-c151
 insert into rating (user_id, dwelling_id, score, comment) values ('2bd9e760-a11e-5d8f-9641-1c54e79c57a1', 66, 3.1, 'En general, encontramos que el apartamento estaba bien, aunque encontramos que algunos de los muebles estaban un poco desgastados. Sin embargo, el anfitrión fue muy amable y servicial.');
 insert into rating (user_id, dwelling_id, score, comment) values ('6c6f05bc-ec76-5476-ad6e-26a30ee33609', 69, 4.2, 'Disfrutamos nuestra estancia en el apartamento, aunque encontramos que la sala de estar era un poco pequeña. Sin embargo, la ubicación era buena y el anfitrión fue muy amable y servicial.');
 
-insert into rental (id, end_date, start_date, total_price, dwelling_id, user_id) values (103, '2023-05-26', '2023-05-29', 2702.13, 64, '2bd9e760-a11e-5d8f-9641-1c54e79c57a1');
+insert into rental (id, end_date, start_date, total_price, dwelling_id, user_id, paid) values (103, '2023-05-26', '2023-05-29', 2702.13, 64, '2bd9e760-a11e-5d8f-9641-1c54e79c57a1', true);
 
 insert into credit_card (id, number, holder, expired_date, cvv, active, type, user_id) values (104, '5191732343975393', 'Elicia Antoniutti', '07/25', '345', true, 'MASTERCARD', '2bd9e760-a11e-5d8f-9641-1c54e79c57a1');
 
