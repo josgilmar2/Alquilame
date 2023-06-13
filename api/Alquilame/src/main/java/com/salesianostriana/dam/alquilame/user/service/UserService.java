@@ -288,4 +288,11 @@ public class UserService {
             throw new AdminsNotFoundException();
         return result;
     }
+
+    public int usersNumbers() {
+        List<User> result = userRepository.findAll();
+        if (result.isEmpty())
+            throw new EmptyListNotFoundException(User.class);
+        return result.size();
+    }
 }

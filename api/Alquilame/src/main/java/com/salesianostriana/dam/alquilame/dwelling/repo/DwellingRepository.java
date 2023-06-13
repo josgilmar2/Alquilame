@@ -2,6 +2,7 @@ package com.salesianostriana.dam.alquilame.dwelling.repo;
 
 import com.salesianostriana.dam.alquilame.dwelling.dto.AllDwellingResponse;
 import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
+import com.salesianostriana.dam.alquilame.ranking.dto.MostRentedDwellings;
 import com.salesianostriana.dam.alquilame.user.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,5 +40,13 @@ public interface DwellingRepository extends JpaRepository<Dwelling, Long>, JpaSp
     @Modifying
     @Query("DELETE FROM Rating r WHERE r.dwelling.id = ?1")
     void deleteRatings(Long id);
+
+    @Query("SELECT NEW com.salesianostriana.dam.alquilame.ranking.dto.MostRentedDwellings(" +
+            "d.name, d.province.name, d.image, d.price, d.averageScore) " +
+            "FROM Dwelling d " +
+            "WHERE EXISTS (SELECT r FROM Rental r WHERE r.dwelling = d AND r.paid = true) " +
+            "GROUP BY d.name, d.province.name, d.image, d.price, d.averageScore " +
+            "ORDER BY COUNT(*) DESC")
+    List<MostRentedDwellings> getMostRentedDwellings();
 
 }

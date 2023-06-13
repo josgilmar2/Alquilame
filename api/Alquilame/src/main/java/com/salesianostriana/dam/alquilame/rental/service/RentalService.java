@@ -6,10 +6,12 @@ import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
 import com.salesianostriana.dam.alquilame.dwelling.repo.DwellingRepository;
 import com.salesianostriana.dam.alquilame.exception.creditcard.CreditCardNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.dwelling.DwellingNotFoundException;
+import com.salesianostriana.dam.alquilame.exception.ranking.RankingNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.rental.PaymentException;
 import com.salesianostriana.dam.alquilame.exception.rental.RentalNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.rental.RentalOwnDwellingException;
 import com.salesianostriana.dam.alquilame.exception.user.UserNotFoundException;
+import com.salesianostriana.dam.alquilame.ranking.dto.UsersWithMoreRentalsResponse;
 import com.salesianostriana.dam.alquilame.rental.dto.RentalRequest;
 import com.salesianostriana.dam.alquilame.rental.model.Rental;
 import com.salesianostriana.dam.alquilame.rental.repository.RentalRepository;
@@ -25,6 +27,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -131,6 +134,25 @@ public class RentalService {
         } catch (StripeException ex) {
             throw new PaymentException("No se pudo cancelar el pago correctamente");
         }
+    }
+
+    public List<UsersWithMoreRentalsResponse> getUserWithMoreRentalsResponse() {
+        List<UsersWithMoreRentalsResponse> result = rentalRepository.getUsersWithMoreRentals();
+        if (result.isEmpty())
+            throw new RankingNotFoundException();
+        for (int i = 0; i < result.size(); i++) {
+            result.get(i).setPosition(i + 1);
+        }
+        return result;
+    }
+
+    public double totalSales() {
+        List<Rental> result = rentalRepository.findAll();
+        double totalSales = 0.0;
+        for (Rental rental : result) {
+            totalSales += rental.getTotalPrice();
+        }
+        return totalSales;
     }
 
 }

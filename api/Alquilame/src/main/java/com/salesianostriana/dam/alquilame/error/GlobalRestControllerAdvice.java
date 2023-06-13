@@ -15,6 +15,7 @@ import com.salesianostriana.dam.alquilame.exception.favourite.FavouriteOwnDwelli
 import com.salesianostriana.dam.alquilame.exception.jwt.JwtTokenException;
 import com.salesianostriana.dam.alquilame.exception.province.ProvinceBadRequestDeleteException;
 import com.salesianostriana.dam.alquilame.exception.province.ProvinceNotFoundException;
+import com.salesianostriana.dam.alquilame.exception.ranking.RankingNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.rating.AlreadyRatedException;
 import com.salesianostriana.dam.alquilame.exception.rating.RatingNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.rating.RatingOwnDwellingException;
@@ -204,6 +205,11 @@ public class GlobalRestControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RentalNotFoundException.class)
     public ResponseEntity<?> handleRentalNotFoundException(RentalNotFoundException ex, WebRequest request) {
+        return buildApiError(ex.getMessage(), request, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(RankingNotFoundException.class)
+    public ResponseEntity<?> handleRankingNotFoundException(RankingNotFoundException ex, WebRequest request) {
         return buildApiError(ex.getMessage(), request, HttpStatus.NOT_FOUND);
     }
 

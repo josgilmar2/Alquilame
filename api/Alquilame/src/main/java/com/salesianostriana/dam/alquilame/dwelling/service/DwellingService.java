@@ -8,6 +8,7 @@ import com.salesianostriana.dam.alquilame.exception.favourite.FavouriteAlreadyIn
 import com.salesianostriana.dam.alquilame.exception.favourite.FavouriteDeleteBadRequestException;
 import com.salesianostriana.dam.alquilame.exception.favourite.FavouriteOwnDwellingsException;
 import com.salesianostriana.dam.alquilame.exception.province.ProvinceNotFoundException;
+import com.salesianostriana.dam.alquilame.exception.ranking.RankingNotFoundException;
 import com.salesianostriana.dam.alquilame.exception.rating.AlreadyRatedException;
 import com.salesianostriana.dam.alquilame.exception.rating.RatingOwnDwellingException;
 import com.salesianostriana.dam.alquilame.exception.user.UserDwellingsNotFoundException;
@@ -20,6 +21,7 @@ import com.salesianostriana.dam.alquilame.dwelling.dto.DwellingRequest;
 import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
 import com.salesianostriana.dam.alquilame.dwelling.repo.DwellingRepository;
 import com.salesianostriana.dam.alquilame.exception.*;
+import com.salesianostriana.dam.alquilame.ranking.dto.MostRentedDwellings;
 import com.salesianostriana.dam.alquilame.rating.dto.RatingRequest;
 import com.salesianostriana.dam.alquilame.rating.model.Rating;
 import com.salesianostriana.dam.alquilame.rating.model.RatingPK;
@@ -255,6 +257,16 @@ public class DwellingService {
             dwellingRepository.save(dwelling);
             return dwelling;
         }).orElseThrow(() -> new DwellingNotFoundException(id));
+    }
+
+    public List<MostRentedDwellings> getMostRentedDwellings() {
+        List<MostRentedDwellings> result = dwellingRepository.getMostRentedDwellings();
+        if(result.isEmpty())
+            throw new RankingNotFoundException();
+        for (int i = 0; i < result.size(); i++) {
+            result.get(i).setPosition(i + 1);
+        }
+        return result;
     }
 
 }

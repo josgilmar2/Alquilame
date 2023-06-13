@@ -632,4 +632,9 @@ public class UserController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/number")
+    public int usersNumber() {
+        return userService.usersNumbers();
+    }
+
 }

@@ -54,4 +54,9 @@ public class RentalController {
                 .build();
     }
 
+    @GetMapping("/totalSales")
+    public double getTotalSales() {
+        return rentalService.totalSales();
+    }
+
 }

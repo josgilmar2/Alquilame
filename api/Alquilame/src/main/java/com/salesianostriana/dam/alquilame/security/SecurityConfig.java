@@ -4,6 +4,7 @@ import com.salesianostriana.dam.alquilame.security.jwt.access.JwtAuthenticationF
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -69,8 +70,22 @@ public class SecurityConfig {
                                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                         .and()
                                 .authorizeRequests()
-                                .antMatchers("/**", "/user/**", "/dwelling/**", "/province/**", "/rental/**", "/creditcard/**").hasAnyRole("PROPIETARIO", "INQUILINO", "ADMIN")
-                                .anyRequest().authenticated();
+                                .antMatchers(HttpMethod.POST, "/dwelling/").hasAnyRole("PROPIETARIO", "ADMIN")
+                                .antMatchers(HttpMethod.PUT, "/dwelling/**").hasAnyRole("PROPIETARIO", "ADMIN")
+                                .antMatchers(HttpMethod.DELETE, "/dwelling/{id}").hasAnyRole("PROPIETARIO", "ADMIN")
+                                .antMatchers("/dwelling/**").hasAnyRole("PROPIETARIO", "INQUILINO", "ADMIN")
+                                .antMatchers("/user/number", "user/ban/**", "/user/unban/**").hasRole("ADMIN")
+                                .antMatchers(HttpMethod.DELETE, "/user/{id}").hasRole("ADMIM")
+                                .antMatchers(HttpMethod.PUT, "/user/{id}/**").hasRole("ADMIN")
+                                .antMatchers("/user/admins").hasRole("ADMIN")
+                                .antMatchers("/user/**").hasAnyRole("PROPIETARIO", "INQUILINO", "ADMIN")
+                                .antMatchers("/auth/register/admin").hasRole("ADMIN")
+                                .antMatchers("/province/**").hasAnyRole("PROPIETARIO", "INQUILINO", "ADMIN")
+                                .antMatchers("/rental/totalSales").hasRole("ADMIN")
+                                .antMatchers("/rental/**").hasAnyRole("PROPIETARIO", "INQUILINO", "ADMIN")
+                                .antMatchers("/creditcard/**").hasAnyRole("PROPIETARIO", "INQUILINO", "ADMIN")
+                                .antMatchers("/ranking/**").hasRole("ADMIN")
+                                .anyRequest().permitAll();
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
@@ -81,7 +96,7 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web -> web.ignoring().antMatchers("/h2-console/**", "/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/download/**"));
+        return (web -> web.ignoring().antMatchers("/h2-console/**", "/auth/register/propietario", "/auth/register/inquilino", "/auth/login", "auth/refreshtoken", "/swagger-ui/**", "/v3/api-docs/**", "/download/**"));
     }
 
 }

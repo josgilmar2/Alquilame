@@ -27,6 +27,16 @@ public class UserResponse {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM/dd/yyyy HH:mm:ss")
     protected LocalDateTime createdAt;
 
+    public UserResponse(String id, String username, String avatar, String fullName, String address, String email, String phoneNumber) {
+        this.id = id;
+        this.username = username;
+        this.avatar = avatar;
+        this.fullName = fullName;
+        this.address = address;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
     public static UserResponse fromUser(User user) {
 
         return UserResponse.builder()
