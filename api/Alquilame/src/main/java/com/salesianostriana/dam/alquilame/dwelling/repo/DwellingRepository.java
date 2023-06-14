@@ -42,7 +42,7 @@ public interface DwellingRepository extends JpaRepository<Dwelling, Long>, JpaSp
     void deleteRatings(Long id);
 
     @Query("SELECT NEW com.salesianostriana.dam.alquilame.ranking.dto.MostRentedDwellings(" +
-            "d.name, d.province.name, d.image, d.price, d.averageScore) " +
+            "d.id, d.name, d.province.name, d.image, d.price, d.averageScore) " +
             "FROM Dwelling d " +
             "WHERE EXISTS (SELECT r FROM Rental r WHERE r.dwelling = d AND r.paid = true) " +
             "GROUP BY d.name, d.province.name, d.image, d.price, d.averageScore " +

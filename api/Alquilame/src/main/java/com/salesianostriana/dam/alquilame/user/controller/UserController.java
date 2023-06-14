@@ -624,14 +624,6 @@ public class UserController {
         return UserResponse.fromUser(toEditAvatar);
     }
 
-    @GetMapping("/admins")
-    public List<UserResponse> userAdmins() {
-        return userService.userAdmins()
-                .stream()
-                .map(UserResponse::fromUser)
-                .collect(Collectors.toList());
-    }
-
     @GetMapping("/number")
     public int usersNumber() {
         return userService.usersNumbers();

@@ -3,12 +3,14 @@ package com.salesianostriana.dam.alquilame.user.repo;
 import com.salesianostriana.dam.alquilame.dwelling.dto.AllDwellingResponse;
 import com.salesianostriana.dam.alquilame.dwelling.model.Dwelling;
 import com.salesianostriana.dam.alquilame.user.model.User;
+import com.salesianostriana.dam.alquilame.user.model.UserRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -81,10 +83,5 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
 
     @EntityGraph(value = "user-with-favourites", type = EntityGraph.EntityGraphType.LOAD)
     Optional<User> findById(UUID id);
-
-    @Query("""
-            SELECT u FROM User u WHERE u.roles = ?1
-            """)
-    List<User> userAdmins(String role);
 
 }

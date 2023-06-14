@@ -25,7 +25,7 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
             "FROM Rental r " +
             "WHERE r.paid = true " +
             "GROUP BY r.user.username, r.user.avatar " +
-            "ORDER BY rentalNumbers DESC")
+            "ORDER BY rentalNumbers DESC, spentMoney DESC")
     List<UsersWithMoreRentalsResponse> getUsersWithMoreRentals();
 
 

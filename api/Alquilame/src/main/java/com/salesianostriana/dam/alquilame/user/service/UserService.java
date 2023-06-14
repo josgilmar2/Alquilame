@@ -282,13 +282,6 @@ public class UserService {
                 }).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public List<User> userAdmins() {
-        List<User> result = userRepository.userAdmins("ADMIN");
-        if (result.isEmpty())
-            throw new AdminsNotFoundException();
-        return result;
-    }
-
     public int usersNumbers() {
         List<User> result = userRepository.findAll();
         if (result.isEmpty())

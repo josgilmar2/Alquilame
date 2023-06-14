@@ -11,11 +11,13 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MostRentedDwellings {
 
+    private Long id;
     private int position;
     private String name, province, image;
     private double price, averageScore;
 
-    public MostRentedDwellings(String name, String province, String image, double price, double averageScore) {
+    public MostRentedDwellings(Long id, String name, String province, String image, double price, double averageScore) {
+        this.id = id;
         this.name = name;
         this.province = province;
         this.image = image;

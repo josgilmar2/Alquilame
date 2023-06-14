@@ -27,10 +27,4 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  getAdmins() {
-    this.userService.getAdmins().subscribe(res => {
-      this.admins = res.filter(admin => admin.id !== this.profile.id);
-    })
-  }
-
 }

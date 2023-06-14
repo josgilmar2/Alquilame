@@ -113,11 +113,4 @@ export class UserService {
     throw new Error("El token no existe");
   }
 
-  getAdmins(): Observable<UserProfile[]> {
-    const url = `${environment.apiBaseUrl}/user/admins`;
-    if (localStorage.getItem('token') != '') {
-      return this.http.get<UserProfile[]>(url);
-    }
-    throw new Error("El token no existe");
-  }
  }
