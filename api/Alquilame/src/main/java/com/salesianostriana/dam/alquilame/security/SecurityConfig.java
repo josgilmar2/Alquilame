@@ -80,7 +80,7 @@ public class SecurityConfig {
                                 .antMatchers(HttpMethod.DELETE, "/dwelling/{id}").hasAnyRole("PROPIETARIO", "ADMIN")
                                 .antMatchers("/dwelling/**").hasAnyRole("PROPIETARIO", "INQUILINO", "ADMIN")
                                 .antMatchers("/user/number", "user/ban/**", "/user/unban/**").hasRole("ADMIN")
-                                .antMatchers(HttpMethod.DELETE, "/user/{id}").hasRole("ADMIM")
+                                .antMatchers(HttpMethod.DELETE, "/user/{id}").hasRole("ADMIN")
                                 .antMatchers(HttpMethod.PUT, "/user/{id}/**").hasRole("ADMIN")
                                 .antMatchers("/user/admins").hasRole("ADMIN")
                                 .antMatchers("/user/**").hasAnyRole("PROPIETARIO", "INQUILINO", "ADMIN")

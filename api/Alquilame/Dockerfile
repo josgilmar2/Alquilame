@@ -1,11 +1,16 @@
-#FROM eclipse-temurin:17-jre-jammy
-#ARG JAR_FILE=target/*.jar
-#COPY ${JAR_FILE} app.jar
-#ENTRYPOINT ["java", "-jar", "/app.jar"]
+FROM maven:3.8.4-openjdk-17-slim AS build
+WORKDIR /app
+COPY ./pom.xml .
+RUN mvn dependency:go-offline -B
+COPY ./src ./src
+COPY ./uploads ./uploads
+RUN mvn clean package -DskipTests
 
-FROM maven:3.8.5-openjdk-17
-WORKDIR /Alquilame
-COPY . .
-RUN mvn clean install
-RUN mvn dependency:resolve
-CMD mvn spring-boot:run
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY --from=build /app/target/Alquilame-0.0.1-SNAPSHOT.jar /app/alquilame.jar
+COPY --from=build /app/uploads ./uploads
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "alquilame.jar"]

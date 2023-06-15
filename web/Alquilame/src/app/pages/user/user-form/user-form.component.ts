@@ -37,6 +37,10 @@ export class UserFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getFormInformation();
+  }
+
+  getFormInformation() {
     if(!this.router.url.includes('edit-user')) {
       return;
     }
@@ -146,7 +150,7 @@ export class UserFormComponent implements OnInit {
       )
       .subscribe(res => {
         Swal.fire('¡Editado!', `Se ha editado a ${this.userToEdit.username} correctamente`, 'success');
-        this.myForm.reset();
+        this.getFormInformation();
       }, (err) => {
         this.errorService.errorsManage(err, `/dashboard/edit-user/${this.userToEdit.id}`, true);
       })

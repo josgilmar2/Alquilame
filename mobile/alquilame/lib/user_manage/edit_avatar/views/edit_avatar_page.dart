@@ -47,7 +47,12 @@ class _EditAvatarPageState extends State<EditAvatarPage> {
                   onSubmissionFailed: (context, state) =>
                       EditAvatarDialog.hide(context),
                   onSuccess: (context, state) {
-                    EditAvatarDialog.hide(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                            "La foto se recargará una vez vuelvas a iniciar sesión"),
+                      ),
+                    );
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(

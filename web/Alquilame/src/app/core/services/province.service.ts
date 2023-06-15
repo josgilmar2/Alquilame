@@ -1,8 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AllProvinceResponse } from 'src/app/shared/models/interfaces/province/all_provinces_response.interface';
 import { environment } from 'src/environments/environment';
+
+const httpAuthOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer' + localStorage.getItem('token'),
+  })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +44,9 @@ export class ProvinceService {
   }*/
 
   getAllProvinces(): Observable<AllProvinceResponse[]> {
-    const url = `${environment.apiBaseUrl}/province/`;
+    const url = `${environment.API_BASE_URL}/province/`;
     if (localStorage.getItem('token') != '') {
-      return this.http.get<AllProvinceResponse[]>(url);
+      return this.http.get<AllProvinceResponse[]>(url, httpAuthOptions);
     }
     throw new Error("El token no existe");
 

@@ -101,4 +101,8 @@ public class Dwelling {
         }
     }
 
+    @PreRemove
+    public void setNullDwellings() {
+        rentals.forEach(rental -> rental.setDwelling(null));
+    }
 }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -8,6 +8,12 @@ import { LoginResponse } from 'src/app/shared/models/interfaces/auth/login_respo
 import { RefreshTokenResponse } from 'src/app/shared/models/interfaces/auth/refresh_token_response.interface';
 import { environment } from 'src/environments/environment';
 
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type': 'application/json'
+  })
+};
+
 @Injectable({
   providedIn: 'root'
 })
@@ -16,14 +22,14 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
 
   login(loginRequest: LoginRequest): Observable<LoginResponse> {
-    const url = `${environment.apiBaseUrl}/auth/login`;
+    const url = `${environment.API_BASE_URL}/auth/login`;
 
-    return this.http.post<LoginResponse>(url, loginRequest);
+    return this.http.post<LoginResponse>(url, loginRequest, httpOptions);
   }
 
   refreshToken(refreshToken: RefreshTokenRequest): Observable<RefreshTokenResponse> {
-    const url = `${environment.apiBaseUrl}/auth/refreshtoken`;
-    return this.http.post<RefreshTokenResponse>(url, refreshToken);
+    const url = `${environment.API_BASE_URL}/auth/refreshtoken`;
+    return this.http.post<RefreshTokenResponse>(url, refreshToken, httpOptions);
   }
 
   logout() {

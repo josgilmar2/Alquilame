@@ -45,7 +45,7 @@ public interface DwellingRepository extends JpaRepository<Dwelling, Long>, JpaSp
             "d.id, d.name, d.province.name, d.image, d.price, d.averageScore) " +
             "FROM Dwelling d " +
             "WHERE EXISTS (SELECT r FROM Rental r WHERE r.dwelling = d AND r.paid = true) " +
-            "GROUP BY d.name, d.province.name, d.image, d.price, d.averageScore " +
+            "GROUP BY d.id, d.name, d.province.name, d.image, d.price, d.averageScore " +
             "ORDER BY COUNT(*) DESC")
     List<MostRentedDwellings> getMostRentedDwellings();
 

@@ -305,8 +305,7 @@ class _HomePageState extends State<HomePage> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              title: const Text(
-                                  '¿Quiéres eliminar esta vivienda de tu lista?'),
+                              title: const Text('¿Quiéres eliminar tu perfil?'),
                               content: const Text(
                                   'Recuerda que esta acción no se puede deshacer.'),
                               actions: [

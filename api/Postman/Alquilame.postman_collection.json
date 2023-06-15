@@ -37,17 +37,7 @@
 					"name": "Get One Dwelling",
 					"request": {
 						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/dwelling/53",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"dwelling",
-								"53"
-							]
-						}
+						"header": []
 					},
 					"response": []
 				},
@@ -75,13 +65,20 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Chalet Cuqui\",\r\n    \"address\": \"C/ Sierpes Nº2, Sevilla\",\r\n    \"description\": \"Chalet muy chulo que está muy chulo y sigue siendo chulo. Tiene habitaciones chulas y eso :)\",\r\n    \"type\": \"CHALET\",\r\n    \"price\": 563,\r\n    \"m2\": 34,\r\n    \"numBedrooms\": 3,\r\n    \"numBathrooms\": 1,\r\n    \"hasElevator\": false,\r\n    \"hasPool\": true,\r\n    \"hasTerrace\": true,\r\n    \"hasGarage\": true,\r\n    \"provinceName\": \"Sevilla\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/joseluisgilmartin/Documents/Alquilame_App/Alquilame/uploads/casa1.jpg"
+								},
+								{
+									"key": "body",
+									"value": "{\n    \"name\": \"Chalet Cuqui\",\n    \"address\": \"C/ Sierpes Nº2, Sevilla\",\n    \"description\": \"Chalet muy chulo que está muy chulo y sigue siendo chulo. Tiene habitaciones chulas y eso :)\",\n    \"type\": \"CHALET\",\n    \"price\": 563,\n    \"m2\": 34,\n    \"numBedrooms\": 3,\n    \"numBathrooms\": 1,\n    \"hasElevator\": false,\n    \"hasPool\": true,\n    \"hasTerrace\": true,\n    \"hasGarage\": true,\n    \"provinceName\": \"Sevilla\"\n}",
+									"contentType": "application/vnd.api+json",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{baseUrl}}/dwelling/",
@@ -102,22 +99,29 @@
 						"method": "PUT",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"name\": \"Chalet Cuqui\",\n    \"address\": \"C/ Sierpes Nº2, Sevilla\",\n    \"description\": \"Chalet muy chulo que está muy chulo y sigue siendo chulo. Tiene habitaciones chulas y eso :)\",\n    \"type\": \"CHALET\",\n    \"price\": 563,\n    \"m2\": 34,\n    \"numBedrooms\": 3,\n    \"numBathrooms\": 1,\n    \"hasElevator\": {{$randomBoolean}},\n    \"hasPool\": {{$randomBoolean}},\n    \"hasTerrace\": {{$randomBoolean}},\n    \"hasGarage\": {{$randomBoolean}},\n    \"provinceId\": 43\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/joseluisgilmartin/Documents/Alquilame/api/Alquilame/uploads/chalet1.jpeg"
+								},
+								{
+									"key": "body",
+									"value": "{\n    \"name\": \"Chalet Cuqui\",\n    \"address\": \"C/ Sierpes Nº2, Sevilla\",\n    \"description\": \"Chalet muy chulo que está muy chulo y sigue siendo chulo. Tiene habitaciones chulas y eso :)\",\n    \"type\": \"CHALET\",\n    \"price\": 563,\n    \"m2\": 34,\n    \"numBedrooms\": 3,\n    \"numBathrooms\": 1,\n    \"hasElevator\": {{$randomBoolean}},\n    \"hasPool\": {{$randomBoolean}},\n    \"hasTerrace\": {{$randomBoolean}},\n    \"hasGarage\": {{$randomBoolean}},\n    \"provinceName\": \"Asturias\"\n}",
+									"contentType": "application/vnd.api+json",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
-							"raw": "{{baseUrl}}/dwelling/103",
+							"raw": "{{baseUrl}}/dwelling/53",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"dwelling",
-								"103"
+								"53"
 							]
 						}
 					},
@@ -166,13 +170,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/dwelling/53/favourite",
+							"raw": "{{baseUrl}}/dwelling/67/favourite",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"dwelling",
-								"53",
+								"67",
 								"favourite"
 							]
 						}
@@ -201,7 +205,7 @@
 				{
 					"name": "Edit Dwelling Image",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "formdata",
@@ -241,6 +245,34 @@
 								"dwelling",
 								"103",
 								"image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rate Dwelling",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"score\": 3.7,\n    \"comment\": \"Casa muy bien amueblada pero mal trato por parte del propietario\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/dwelling/65/rate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"dwelling",
+								"65",
+								"rate"
 							]
 						}
 					},
@@ -413,7 +445,7 @@
 						"disabledSystemHeaders": {}
 					},
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [],
 						"body": {
 							"mode": "formdata",
@@ -453,6 +485,32 @@
 								"deleteAvatar"
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User By Admin",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/user/2bd9e760-a11e-5d8f-9641-1c54e79c57a1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user",
+								"2bd9e760-a11e-5d8f-9641-1c54e79c57a1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Number Of Users",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
@@ -646,6 +704,48 @@
 					"response": []
 				},
 				{
+					"name": "POST Login Nuevo Propietario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", json.token);",
+									"pm.collectionVariables.set(\"refresh_token\", json.refreshToken);",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"user1\",\n    \"password\": \"DFGhjkl.3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "POST Nuevo Inquilino",
 					"request": {
 						"method": "POST",
@@ -681,7 +781,8 @@
 							"script": {
 								"exec": [
 									"var json = pm.response.json();",
-									"pm.collectionVariables.set(\"token\", json.token);"
+									"pm.collectionVariables.set(\"token\", json.token);",
+									"pm.collectionVariables.set(\"refresh_token\", json.refreshToken);"
 								],
 								"type": "text/javascript"
 							}
@@ -693,6 +794,86 @@
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"username\": \"user1\",\n    \"password\": \"DFGhjkl.3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"pm.collectionVariables.set(\"token\", json.token);",
+									"pm.collectionVariables.set(\"refresh_token\", json.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refreshToken\": \"{{refresh_token}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/refreshtoken",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"refreshtoken"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST Login Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();\r",
+									"pm.collectionVariables.set(\"token\", json.token);\r",
+									"pm.collectionVariables.set(\"refresh_token\", json.refreshToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"nommundsen0\",\r\n    \"password\": \"dzRJbYc11RRr\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -822,6 +1003,247 @@
 								"3"
 							]
 						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Rental",
+			"item": [
+				{
+					"name": "Create Rental",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"startDate\": \"29/05/2023\",\n    \"endDate\": \"01/06/2023\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/rental/56",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"rental",
+								"56"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Confirm Rental",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/rental/confirm/pi_3NBejuGtVskk5WrS0xDy7alw",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"rental",
+								"confirm",
+								"pi_3NBejuGtVskk5WrS0xDy7alw"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Total Sales",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "CreditCard",
+			"item": [
+				{
+					"name": "Create CreditCard",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"number\": \"5555555555554444\",\n    \"holder\": \"Luismi López\",\n    \"expiredDate\": \"07/24\",\n    \"cvv\": \"456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/creditcard/",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"creditcard",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate CreditCard",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/creditcard/activate/106",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"creditcard",
+								"activate",
+								"106"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All User CrediCards",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Ranking",
+			"item": [
+				{
+					"name": "User With More Rentals",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/ranking/user/more/rental",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"ranking",
+								"user",
+								"more",
+								"rental"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Most Rented Dwellings",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
